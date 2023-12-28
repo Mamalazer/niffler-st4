@@ -2,36 +2,34 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.GenerateCategory;
+import guru.qa.niffler.jupiter.DisabledByIssue;
 import guru.qa.niffler.jupiter.GenerateSpend;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.page.WelcomePage;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class SpendingTest {
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.$;
 
-  WelcomePage welcomePage = new WelcomePage();
-  MainPage mainPage = new MainPage();
+public class SpendingTest extends BaseWebTest {
 
   static {
-    Configuration.browserSize = "1920x1080";
+    Configuration.browserSize = "1980x1024";
   }
 
   @BeforeEach
   void doLogin() {
     Selenide.open("http://127.0.0.1:3000/main");
-    welcomePage.goToLoginPage()
-            .doLogin("duck", "12345");
+    $("a[href*='redirect']").click();
+    $("input[name='username']").setValue("duck");
+    $("input[name='password']").setValue("12345");
+    $("button[type='submit']").click();
   }
 
-  @GenerateCategory(
-      category = "Обучение",
-      username = "duck"
-  )
   @GenerateSpend(
       username = "duck",
       description = "QA.GURU Advanced 4",
@@ -39,12 +37,23 @@ public class SpendingTest {
       category = "Обучение",
       currency = CurrencyValues.RUB
   )
+  @DisabledByIssue("74")
   @Test
-  @DisplayName("Проверка удаления траты")
   void spendingShouldBeDeletedByButtonDeleteSpending(SpendJson spend) {
+    $(".spendings-table tbody")
+        .$$("tr")
+        .find(text(spend.description()))
+        .$$("td")
+        .first()
+        .click();
 
-    mainPage.selectSpendingByDescription(spend.description())
-            .deleteSelectedSpendings()
-            .checkThatSpendingsEmpty();
+    Allure.step("Delete spending", () -> $(byText("Delete selected"))
+        .click());
+
+    Allure.step("Check that spending was deleted", () -> {
+      $(".spendings-table tbody")
+          .$$("tr")
+          .shouldHave(size(0));
+    });
   }
 }
