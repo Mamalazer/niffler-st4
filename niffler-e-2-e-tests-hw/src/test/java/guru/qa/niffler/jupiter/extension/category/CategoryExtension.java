@@ -1,6 +1,7 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.extension.category;
 
 import guru.qa.niffler.api.CategoryApi;
+import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -42,7 +43,7 @@ public class CategoryExtension implements BeforeEachCallback {
 
             CategoryJson created = categoryApi.addCategory(categoryJson).execute().body();
             extensionContext.getStore(NAMESPACE)
-                    .put("category", created);
+                    .put(extensionContext.getUniqueId(), created);
         }
     }
 }

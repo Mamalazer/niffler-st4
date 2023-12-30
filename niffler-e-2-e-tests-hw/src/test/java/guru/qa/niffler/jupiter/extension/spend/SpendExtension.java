@@ -1,6 +1,7 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.extension.spend;
 
 import guru.qa.niffler.api.SpendApi;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -47,7 +48,7 @@ public class SpendExtension implements BeforeEachCallback {
 
       SpendJson created = spendApi.addSpend(spendJson).execute().body();
       extensionContext.getStore(NAMESPACE)
-          .put("spend", created);
+          .put(extensionContext.getUniqueId(), created);
     }
   }
 }
