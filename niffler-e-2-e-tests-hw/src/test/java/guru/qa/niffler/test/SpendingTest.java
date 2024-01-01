@@ -1,6 +1,5 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
@@ -14,12 +13,8 @@ import org.junit.jupiter.api.Test;
 
 public class SpendingTest extends BaseWebTest {
 
-  WelcomePage welcomePage = new WelcomePage();
-  MainPage mainPage = new MainPage();
-
-  static {
-    Configuration.browserSize = "1920x1080";
-  }
+  protected WelcomePage welcomePage = new WelcomePage();
+  protected MainPage mainPage = new MainPage();
 
   @BeforeEach
   void doLogin() {

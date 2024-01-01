@@ -1,8 +1,6 @@
 package guru.qa.niffler.jupiter.extension.user;
 
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.CurrencyValues;
-import guru.qa.niffler.model.TestData;
 import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.extension.*;
 
@@ -13,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
+import static guru.qa.niffler.model.UserJson.user;
 
 public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
@@ -28,6 +27,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
         Queue<UserJson> commonQueue = new ConcurrentLinkedQueue<>();
 
         friendsQueue.add(user("dima", "12345", WITH_FRIENDS));
+//        friendsQueue.add(user("elephant", "12345", WITH_FRIENDS));
         invitationReceivedQueue.add(user("duck", "12345", INVITATION_RECIEVED));
         invitationSendQueue.add(user("bee", "12345", INVITATION_SEND));
         commonQueue.add(user("barsik", "12345", COMMON));
@@ -40,6 +40,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
 
     @Override
     public void beforeEach(ExtensionContext context) {
+
         Map<User.UserType, UserJson> testCandidates = new HashMap<>();
 
         List<Parameter> params = Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
@@ -90,21 +91,5 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
         return (UserJson) extensionContext.getStore(NAMESPACE)
                 .get(extensionContext.getUniqueId(), Map.class)
                 .get(parameterContext.getParameter().getAnnotation(User.class).value());
-    }
-
-    private static UserJson user(String username, String password, User.UserType userType) {
-        return new UserJson(
-                null,
-                username,
-                null,
-                null,
-                CurrencyValues.RUB,
-                null,
-                null,
-                new TestData(
-                        password,
-                        userType
-                )
-        );
     }
 }

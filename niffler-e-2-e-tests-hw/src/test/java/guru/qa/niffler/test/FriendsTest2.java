@@ -14,7 +14,8 @@ import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 public class FriendsTest2 {
 
   @BeforeEach
-  void doLogin(@User(WITH_FRIENDS) UserJson user) {
+//  void doLogin(@User(WITH_FRIENDS) UserJson user) {
+  void doLogin() {
 //    Selenide.open("http://127.0.0.1:3000/main");
 //    $("a[href*='redirect']").click();
 //    $("input[name='username']").setValue(user.username());
@@ -23,7 +24,7 @@ public class FriendsTest2 {
   }
 
   @Test
-  void friendsTableShouldNotBeEmpty0(@User(WITH_FRIENDS) UserJson user, @User(INVITATION_RECIEVED) UserJson user2) throws Exception {
+  void friendsTableShouldNotBeEmpty0(@User(WITH_FRIENDS) UserJson user, @User(INVITATION_SEND) UserJson user2) throws Exception {
     UserJson user_1 = user;
     UserJson user_2 = user2;
     Thread.sleep(3000);
