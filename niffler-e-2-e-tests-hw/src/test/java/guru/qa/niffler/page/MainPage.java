@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class MainPage {
 
     private final SelenideElement spendingTable = $(".spendings-table tbody");
+    public HeaderPage header = new HeaderPage();
 
     @Step("Выбрать трату по описанию '{description}'")
     public MainPage selectSpendingByDescription(String description) {
