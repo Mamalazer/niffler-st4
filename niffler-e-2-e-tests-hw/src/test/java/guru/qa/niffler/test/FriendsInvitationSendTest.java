@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_RECIEVED;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_SEND;
 
 @ExtendWith(UsersQueueExtension.class)
@@ -27,17 +28,17 @@ public class FriendsInvitationSendTest extends BaseWebTest {
 
     @Test
     @DisplayName("У пользователя на странице со списком всех пользователей отображается, что отправлено приглашение в друзья")
-    void userHasSendedInviteInAllPeoplePage(@User(INVITATION_SEND) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+    void userHasSendedInviteInAllPeoplePage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
+        loginPage.doLogin(user1.username(), user1.testData().password())
                 .header.goToAllPeoplePage()
-                .checkThatInvitationSend("duck");
+                .checkThatInvitationSend(user2.username());
     }
 
     @Test
     @DisplayName("У пользователя на странице со списком всех друзей не отображается пользователь, которому отправлено приглашение в друзья")
-    void userHasntInvitedUserInFriendsPage(@User(INVITATION_SEND) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+    void userHasntInvitedUserInFriendsPage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
+        loginPage.doLogin(user1.username(), user1.testData().password())
                 .header.goToFriendsPage()
-                .checkThatInfoAboutUserNotExist("duck");
+                .checkThatInfoAboutUserNotExist(user2.username());
     }
 }

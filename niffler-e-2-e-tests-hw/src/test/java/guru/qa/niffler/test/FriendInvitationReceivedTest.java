@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_RECIEVED;
+import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_SEND;
 
 @ExtendWith(UsersQueueExtension.class)
 public class FriendInvitationReceivedTest extends BaseWebTest {
@@ -27,17 +28,17 @@ public class FriendInvitationReceivedTest extends BaseWebTest {
 
     @Test
     @DisplayName("У пользователя отображается приглашение в друзья на странице со списком всех пользователей")
-    void userHasInviteInAllPeoplePage(@User(INVITATION_RECIEVED) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+    void userHasInviteInAllPeoplePage(@User(INVITATION_RECIEVED) UserJson user1, @User(INVITATION_SEND) UserJson user2) {
+        loginPage.doLogin(user1.username(), user1.testData().password())
                 .header.goToAllPeoplePage()
-                .checkThatInvitationReceived("bee");
+                .checkThatInvitationReceived(user2.username());
     }
 
     @Test
     @DisplayName("У пользователя отображается приглашение в друзья на странице с друзьями")
-    void userHasInviteInFriendsPage(@User(INVITATION_RECIEVED) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+    void userHasInviteInFriendsPage(@User(INVITATION_RECIEVED) UserJson user1, @User(INVITATION_SEND) UserJson user2) {
+        loginPage.doLogin(user1.username(), user1.testData().password())
                 .header.goToFriendsPage()
-                .checkThatInvitationReceived("bee");
+                .checkThatInvitationReceived(user2.username());
     }
 }
