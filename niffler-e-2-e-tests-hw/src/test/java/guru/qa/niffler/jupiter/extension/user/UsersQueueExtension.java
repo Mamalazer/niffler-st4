@@ -2,9 +2,11 @@ package guru.qa.niffler.jupiter.extension.user;
 
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.UserJson;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
 
 import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +20,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(UsersQueueExtension.class);
 
-    private static Map<User.UserType, Queue<UserJson>> users = new ConcurrentHashMap<>();
+    private static final Map<User.UserType, Queue<UserJson>> USERS = new ConcurrentHashMap<>();
 
     static {
         Queue<UserJson> friendsQueue = new ConcurrentLinkedQueue<>();
@@ -27,22 +29,29 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
         Queue<UserJson> commonQueue = new ConcurrentLinkedQueue<>();
 
         friendsQueue.add(user("dima", "12345", WITH_FRIENDS));
+        friendsQueue.add(user("elephant", "12345", WITH_FRIENDS));
         invitationReceivedQueue.add(user("duck", "12345", INVITATION_RECIEVED));
         invitationSendQueue.add(user("bee", "12345", INVITATION_SEND));
         commonQueue.add(user("barsik", "12345", COMMON));
 
-        users.put(WITH_FRIENDS, friendsQueue);
-        users.put(INVITATION_RECIEVED, invitationReceivedQueue);
-        users.put(INVITATION_SEND, invitationSendQueue);
-        users.put(COMMON, commonQueue);
+        USERS.put(WITH_FRIENDS, friendsQueue);
+        USERS.put(INVITATION_RECIEVED, invitationReceivedQueue);
+        USERS.put(INVITATION_SEND, invitationSendQueue);
+        USERS.put(COMMON, commonQueue);
     }
 
     @Override
     public void beforeEach(ExtensionContext context) {
 
         Map<User.UserType, UserJson> testCandidates = new HashMap<>();
+        List<Method> actualMethods = new ArrayList<>();
 
-        List<Parameter> params = Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
+        actualMethods.add(context.getRequiredTestMethod());
+        Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(BeforeEach.class))
+                .forEach(actualMethods::add);
+
+        List<Parameter> params = actualMethods.stream()
                 .map(Executable::getParameters)
                 .flatMap(Arrays::stream)
                 .filter(param -> param.isAnnotationPresent(User.class))
@@ -57,7 +66,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
             }
 
             UserJson testCandidate = null;
-            Queue<UserJson> queue = users.get(annotationType);
+            Queue<UserJson> queue = USERS.get(annotationType);
             while (testCandidate == null) {
                 testCandidate = queue.poll();
             }
@@ -73,7 +82,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
                 .get(context.getUniqueId(), Map.class);
 
         for (Map.Entry<?, ?> entry : usersFromTest.entrySet()) {
-            users.get(entry.getKey()).add((UserJson) entry.getValue());
+            USERS.get(entry.getKey()).add((UserJson) entry.getValue());
         }
     }
 

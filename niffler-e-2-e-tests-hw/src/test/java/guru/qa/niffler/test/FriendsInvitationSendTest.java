@@ -2,19 +2,16 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.jupiter.extension.user.UsersQueueExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_RECIEVED;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_SEND;
 
-@ExtendWith(UsersQueueExtension.class)
 public class FriendsInvitationSendTest extends BaseWebTest {
 
     WelcomePage welcomePage = new WelcomePage();
