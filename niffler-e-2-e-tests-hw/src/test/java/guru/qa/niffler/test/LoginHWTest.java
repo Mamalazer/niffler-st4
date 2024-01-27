@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith(UserRepositoryExtension.class)
-public class LoginTest extends BaseWebTest {
+public class LoginHWTest extends BaseWebTest {
 
   private UserRepository userRepository;
 
@@ -26,7 +26,7 @@ public class LoginTest extends BaseWebTest {
   @BeforeEach
   void createUser() {
     userAuth = new UserAuthEntity();
-    userAuth.setUsername("valentin_1");
+    userAuth.setUsername("fish");
     userAuth.setPassword("12345");
     userAuth.setEnabled(true);
     userAuth.setAccountNonExpired(true);
@@ -41,10 +41,10 @@ public class LoginTest extends BaseWebTest {
     );
 
     user = new UserEntity();
-    user.setUsername("valentin_1");
+    user.setUsername("fish");
     user.setCurrency(CurrencyValues.RUB);
-    userRepository.createInAuth(userAuth);
-    userRepository.createInUserdata(user);
+    userAuth = userRepository.createInAuth(userAuth);
+    user = userRepository.createInUserdata(user);
   }
 
   @AfterEach
@@ -55,7 +55,8 @@ public class LoginTest extends BaseWebTest {
 
   @Test
   void statisticShouldBeVisibleAfterLogin() {
-    Selenide.open("http://127.0.0.1:3000");
+//    Selenide.open("http://127.0.0.1:3000");
+    Selenide.open("http://frontend.niffler.dc");
     $("a[href*='redirect']").click();
     $("input[name='username']").setValue(userAuth.getUsername());
     $("input[name='password']").setValue(userAuth.getPassword());
