@@ -19,6 +19,7 @@ buildscript {
         userdataWsdlUrl = System.getProperty("test.env") == "docker"
                 ? "http://userdata.niffler.dc:8089/ws/userdata.wsdl"
                 : "http://127.0.0.1:8089/ws/userdata.wsdl"
+        fakerVersion = '1.0.2'
     }
 }
 
@@ -147,6 +148,8 @@ dependencies {
     // Lombok
     testAnnotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
+    // Faker
+    testImplementation "com.github.javafaker:javafaker:${project.ext.fakerVersion}"
 }
 
 tasks.withType(JavaCompile) {

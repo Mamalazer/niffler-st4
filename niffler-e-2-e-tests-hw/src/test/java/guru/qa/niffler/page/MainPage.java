@@ -5,6 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -12,6 +13,10 @@ public class MainPage {
 
     private final SelenideElement spendingTable = $(".spendings-table tbody");
     public HeaderPage header = new HeaderPage();
+
+    public MainPage() {
+        $(".main-content").shouldBe(visible);
+    }
 
     @Step("Выбрать трату по описанию '{description}'")
     public MainPage selectSpendingByDescription(String description) {
