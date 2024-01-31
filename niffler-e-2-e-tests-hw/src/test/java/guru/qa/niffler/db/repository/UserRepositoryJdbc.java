@@ -135,9 +135,26 @@ public class UserRepositoryJdbc implements UserRepository {
   @Override
   public void deleteInUserdataById(UUID id) {
     try (Connection conn = udDs.getConnection()) {
-      try (PreparedStatement ps = conn.prepareStatement("DELETE FROM \"user\" WHERE id = ?")) {
-        ps.setObject(1, id);
-        ps.executeUpdate();
+      conn.setAutoCommit(false);
+      try (
+              PreparedStatement userPs = conn.prepareStatement("DELETE FROM \"user\" WHERE id = ?");
+              PreparedStatement friendsPs = conn.prepareStatement("DELETE FROM friendship WHERE user_id = ?");
+              PreparedStatement invitesPs = conn.prepareStatement("DELETE FROM friendship WHERE friend_id = ?")
+      ) {
+        userPs.setObject(1, id);
+        friendsPs.setObject(1, id);
+        invitesPs.setObject(1, id);
+
+        userPs.executeUpdate();
+        friendsPs.executeUpdate();
+        invitesPs.executeUpdate();
+
+        conn.commit();
+      } catch (SQLException e) {
+        conn.rollback();
+        throw e;
+      } finally {
+        conn.setAutoCommit(true);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
