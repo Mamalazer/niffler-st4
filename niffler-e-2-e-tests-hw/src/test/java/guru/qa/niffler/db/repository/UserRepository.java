@@ -3,6 +3,7 @@ package guru.qa.niffler.db.repository;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.db.model.UserEntity;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
@@ -15,11 +16,11 @@ public interface UserRepository {
 
   void deleteInUserdataById(UUID id);
 
-  void updateInAuthById(UserAuthEntity userInfo);
+  Optional<UserAuthEntity> updateInAuthById(UserAuthEntity userInfo);
 
-  void updateInUserDataById(UserEntity userData);
+  Optional<UserEntity> updateInUserDataById(UserEntity userData);
 
-  UserAuthEntity selectUserInfoFromAuthById(UUID id);
+  Optional<UserAuthEntity> selectUserInfoFromAuthById(UUID id);
 
-  UserEntity selectUserInfoFromUserDataById(UUID id);
+  Optional<UserEntity> selectUserInfoFromUserDataById(UUID id);
 }
