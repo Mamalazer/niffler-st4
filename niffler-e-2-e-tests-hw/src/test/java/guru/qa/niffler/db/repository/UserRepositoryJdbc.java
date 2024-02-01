@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserRepositoryJdbc implements UserRepository {
@@ -137,13 +138,14 @@ public class UserRepositoryJdbc implements UserRepository {
     try (Connection conn = udDs.getConnection()) {
       conn.setAutoCommit(false);
       try (
-              PreparedStatement userPs = conn.prepareStatement("DELETE FROM \"user\" WHERE id = ?");
+              PreparedStatement invitesPs = conn.prepareStatement("DELETE FROM friendship WHERE friend_id = ?");
               PreparedStatement friendsPs = conn.prepareStatement("DELETE FROM friendship WHERE user_id = ?");
-              PreparedStatement invitesPs = conn.prepareStatement("DELETE FROM friendship WHERE friend_id = ?")
+              PreparedStatement userPs = conn.prepareStatement("DELETE FROM \"user\" WHERE id = ?")
       ) {
-        userPs.setObject(1, id);
-        friendsPs.setObject(1, id);
+
         invitesPs.setObject(1, id);
+        friendsPs.setObject(1, id);
+        userPs.setObject(1, id);
 
         userPs.executeUpdate();
         friendsPs.executeUpdate();
@@ -162,12 +164,17 @@ public class UserRepositoryJdbc implements UserRepository {
   }
 
   @Override
-  public void updateInAuthById(UserAuthEntity userInfo) {
+  public Optional<UserAuthEntity> updateInAuthById(UserAuthEntity userInfo) {
     try (Connection conn = authDs.getConnection()) {
-      try (PreparedStatement userPs = conn.prepareStatement(
+      conn.setAutoCommit(false);
+      try (
+              PreparedStatement userPs = conn.prepareStatement(
               "UPDATE \"user\" " +
                       "SET username = ?, password = ?, enabled = ?, account_non_expired = ?, account_non_locked = ?, " +
                       "credentials_non_expired = ? where id = ?");
+              PreparedStatement authorityPs = conn.prepareStatement(
+                      "UPDATE \"authority\" SET authority = ? where id = ?"
+              )
       ) {
 
         userPs.setString(1, userInfo.getUsername());
@@ -179,14 +186,32 @@ public class UserRepositoryJdbc implements UserRepository {
         userPs.setObject(7, userInfo.getId());
 
         userPs.executeUpdate();
+
+        for (AuthorityEntity entity : userInfo.getAuthorities()) {
+          authorityPs.setString(1, entity.getAuthority().name());
+          authorityPs.setObject(2, entity.getId());
+          authorityPs.addBatch();
+          authorityPs.clearParameters();
+        }
+
+        authorityPs.executeBatch();
+        conn.commit();
+
+      } catch (Exception e) {
+        conn.rollback();
+        throw e;
+      } finally {
+        conn.setAutoCommit(true);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+
+    return selectUserInfoFromAuthById(userInfo.getId());
   }
 
   @Override
-  public void updateInUserDataById(UserEntity userData) {
+  public Optional<UserEntity> updateInUserDataById(UserEntity userData) {
     try (Connection conn = udDs.getConnection()) {
       try (PreparedStatement ps = conn.prepareStatement(
               "UPDATE \"user\" SET username = ?, currency = ?, firstname = ?, surname = ?, photo = ? WHERE id = ?"
@@ -204,17 +229,19 @@ public class UserRepositoryJdbc implements UserRepository {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+
+    return selectUserInfoFromUserDataById(userData.getId());
   }
 
   @Override
-  public UserAuthEntity selectUserInfoFromAuthById(UUID id) {
+  public Optional<UserAuthEntity> selectUserInfoFromAuthById(UUID id) {
 
     UserAuthEntity userInfo = new UserAuthEntity();
 
     try (Connection conn = authDs.getConnection()) {
       try (
               PreparedStatement userPs = conn.prepareStatement("SELECT * FROM \"user\" WHERE id = ?");
-              PreparedStatement authorityPs = conn.prepareStatement("SELECT * FROM \"authority\" WHERE user_id = ?");
+              PreparedStatement authorityPs = conn.prepareStatement("SELECT * FROM \"authority\" WHERE user_id = ?")
         ) {
 
         userPs.setObject(1, id);
@@ -222,7 +249,7 @@ public class UserRepositoryJdbc implements UserRepository {
 
         try (
                 ResultSet userSet = userPs.executeQuery();
-                ResultSet authoritySet = authorityPs.executeQuery();
+                ResultSet authoritySet = authorityPs.executeQuery()
           ) {
 
           if (userSet.next()) {
@@ -259,15 +286,15 @@ public class UserRepositoryJdbc implements UserRepository {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-    return userInfo;
+    return Optional.of(userInfo);
   }
 
   @Override
-  public UserEntity selectUserInfoFromUserDataById(UUID id) {
+  public Optional<UserEntity> selectUserInfoFromUserDataById(UUID id) {
     UserEntity userEntity = new UserEntity();
 
     try (Connection conn = udDs.getConnection()) {
-      try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM \"user\" WHERE id = ?");) {
+      try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM \"user\" WHERE id = ?")) {
         ps.setObject(1, id);
 
         try (ResultSet set = ps.executeQuery()) {
@@ -302,6 +329,6 @@ public class UserRepositoryJdbc implements UserRepository {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-    return userEntity;
+    return Optional.of(userEntity);
   }
 }
