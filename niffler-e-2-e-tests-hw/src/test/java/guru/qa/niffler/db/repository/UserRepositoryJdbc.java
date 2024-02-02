@@ -164,7 +164,7 @@ public class UserRepositoryJdbc implements UserRepository {
   }
 
   @Override
-  public Optional<UserAuthEntity> updateInAuthById(UserAuthEntity userInfo) {
+  public Optional<UserAuthEntity> updateInAuth(UserAuthEntity userInfo) {
     try (Connection conn = authDs.getConnection()) {
       conn.setAutoCommit(false);
       try (
@@ -211,7 +211,7 @@ public class UserRepositoryJdbc implements UserRepository {
   }
 
   @Override
-  public Optional<UserEntity> updateInUserDataById(UserEntity userData) {
+  public Optional<UserEntity> updateInUserData(UserEntity userData) {
     try (Connection conn = udDs.getConnection()) {
       try (PreparedStatement ps = conn.prepareStatement(
               "UPDATE \"user\" SET username = ?, currency = ?, firstname = ?, surname = ?, photo = ? WHERE id = ?"
@@ -267,17 +267,7 @@ public class UserRepositoryJdbc implements UserRepository {
           while (authoritySet.next()) {
             AuthorityEntity entity = new AuthorityEntity();
             entity.setId(UUID.fromString(authoritySet.getString("id")));
-
-            switch (authoritySet.getString("authority")) {
-              case "read" :
-                entity.setAuthority(Authority.read);
-                break;
-              case "write" :
-                entity.setAuthority(Authority.write);
-                break;
-              default :
-                throw new IllegalStateException("Unknown Authority");
-            }
+            entity.setAuthority(Authority.valueOf(authoritySet.getString("authority")));
 
             userInfo.getAuthorities().add(entity);
           }
@@ -304,23 +294,8 @@ public class UserRepositoryJdbc implements UserRepository {
             userEntity.setFirstname(set.getString("firstname"));
             userEntity.setSurname(set.getString("surname"));
             userEntity.setPhoto(set.getString("photo") != null ? set.getString("photo").getBytes() : null);
+            userEntity.setCurrency(CurrencyValues.valueOf(set.getString("currency")));
 
-            switch (set.getString("currency")) {
-              case "RUB" :
-                userEntity.setCurrency(CurrencyValues.RUB);
-                break;
-              case "USD" :
-                userEntity.setCurrency(CurrencyValues.USD);
-                break;
-              case "EUR" :
-                userEntity.setCurrency(CurrencyValues.EUR);
-                break;
-              case "KZT" :
-                userEntity.setCurrency(CurrencyValues.KZT);
-                break;
-              default :
-                throw new IllegalStateException("Unknown currency value");
-            }
           } else {
             throw new IllegalStateException("Can`t find row in user table");
           }
