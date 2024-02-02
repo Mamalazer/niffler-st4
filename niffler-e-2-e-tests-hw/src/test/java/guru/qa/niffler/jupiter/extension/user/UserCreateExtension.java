@@ -18,14 +18,14 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserCreateExtension.class);
 
     private final UserRepository userRepository = new UserRepositoryJdbc();
-    private Faker faker = new Faker();
-
-    private UserAuthEntity userAuth;
-    private UserEntity userEntity;
-    private List<String> actualUsers = new ArrayList<>();
+    private final Faker faker = new Faker();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
+
+        UserAuthEntity userAuth;
+        UserEntity userEntity;
+        List<String> actualUsers = new ArrayList<>();
         List<Method> actualMethods = new ArrayList<>();
         UserAuthInfo userAuthInfo = new UserAuthInfo();
 
@@ -40,8 +40,9 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
 
         for (Method method : methods) {
 
-            String username = method.getAnnotation(DbUser.class).username();
-            String password = method.getAnnotation(DbUser.class).password();
+            DbUser annotation = method.getAnnotation(DbUser.class);
+            String username = annotation.username();
+            String password = annotation.password();
 
             if (actualUsers.contains(username)) {
                 continue;
