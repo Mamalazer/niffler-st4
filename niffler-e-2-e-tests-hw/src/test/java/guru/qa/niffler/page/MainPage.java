@@ -14,10 +14,6 @@ public class MainPage {
     private final SelenideElement spendingTable = $(".spendings-table tbody");
     public HeaderPage header = new HeaderPage();
 
-    public MainPage() {
-        $(".main-content").shouldBe(visible);
-    }
-
     @Step("Выбрать трату по описанию '{description}'")
     public MainPage selectSpendingByDescription(String description) {
         spendingTable
@@ -41,6 +37,12 @@ public class MainPage {
         spendingTable
                 .$$("tr")
                 .shouldHave(size(0));
+        return this;
+    }
+
+    @Step("Убедиться, что Main page загрузилась")
+    public MainPage checkThatMainPageLoaded() {
+        $(".main-content").shouldBe(visible);
         return this;
     }
 }
