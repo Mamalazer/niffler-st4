@@ -24,13 +24,13 @@ public class LoginHWTest extends BaseWebTest {
   @Test
   void successfulLogin(UserAuthEntity userAuth) {
     loginPage.doLogin(userAuth.getUsername(), userAuth.getPassword())
-            .checkThatMainPageLoaded();
+            .checkIsLoaded();
   }
 
   @DbUser()
   @Test
   void successfulLoginWithRandomUser(UserAuthEntity userAuth) {
     loginPage.doLogin(userAuth.getUsername(), userAuth.getPassword())
-            .checkThatMainPageLoaded();
+            .checkIsLoaded();
   }
 }
