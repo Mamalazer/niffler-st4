@@ -41,7 +41,7 @@ public class MainPage {
     }
 
     @Step("Убедиться, что Main page загрузилась")
-    public MainPage checkThatMainPageLoaded() {
+    public MainPage checkIsLoaded() {
         $(".main-content").shouldBe(visible);
         return this;
     }
