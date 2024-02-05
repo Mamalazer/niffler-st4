@@ -164,7 +164,7 @@ public class UserRepositoryJdbc implements UserRepository {
   }
 
   @Override
-  public Optional<UserAuthEntity> updateInAuthById(UserAuthEntity userInfo) {
+  public Optional<UserAuthEntity> updateInAuth(UserAuthEntity userInfo) {
     try (Connection conn = authDs.getConnection()) {
       conn.setAutoCommit(false);
       try (
@@ -211,7 +211,7 @@ public class UserRepositoryJdbc implements UserRepository {
   }
 
   @Override
-  public Optional<UserEntity> updateInUserDataById(UserEntity userData) {
+  public Optional<UserEntity> updateInUserData(UserEntity userData) {
     try (Connection conn = udDs.getConnection()) {
       try (PreparedStatement ps = conn.prepareStatement(
               "UPDATE \"user\" SET username = ?, currency = ?, firstname = ?, surname = ?, photo = ? WHERE id = ?"
