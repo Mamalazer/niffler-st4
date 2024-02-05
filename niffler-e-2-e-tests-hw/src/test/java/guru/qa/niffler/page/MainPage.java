@@ -5,6 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -36,6 +37,12 @@ public class MainPage {
         spendingTable
                 .$$("tr")
                 .shouldHave(size(0));
+        return this;
+    }
+
+    @Step("Убедиться, что Main page загрузилась")
+    public MainPage checkIsLoaded() {
+        $(".main-content").shouldBe(visible);
         return this;
     }
 }
