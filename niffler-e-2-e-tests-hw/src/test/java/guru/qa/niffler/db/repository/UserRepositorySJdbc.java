@@ -1,11 +1,11 @@
 package guru.qa.niffler.db.repository;
 
 import guru.qa.niffler.db.DataSourceProvider;
-import guru.qa.niffler.db.JdbcUrl;
-import guru.qa.niffler.db.model.UserAuthEntity;
-import guru.qa.niffler.db.model.UserEntity;
-import guru.qa.niffler.db.model.sjdbc.UserAuthEntityResultSetExtractor;
-import guru.qa.niffler.db.model.sjdbc.UserEntityRowMapper;
+import guru.qa.niffler.db.Database;
+import guru.qa.niffler.db.models.UserAuthEntity;
+import guru.qa.niffler.db.models.UserEntity;
+import guru.qa.niffler.db.models.sjdbc.UserAuthEntityResultSetExtractor;
+import guru.qa.niffler.db.models.sjdbc.UserEntityRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,10 +32,10 @@ public class UserRepositorySJdbc implements UserRepository {
 
   public UserRepositorySJdbc() {
     JdbcTransactionManager authTm = new JdbcTransactionManager(
-        DataSourceProvider.INSTANCE.dataSource(JdbcUrl.AUTH)
+        DataSourceProvider.INSTANCE.dataSource(Database.AUTH)
     );
     JdbcTransactionManager udTm = new JdbcTransactionManager(
-        DataSourceProvider.INSTANCE.dataSource(JdbcUrl.USERDATA)
+        DataSourceProvider.INSTANCE.dataSource(Database.USERDATA)
     );
 
     this.authTxt = new TransactionTemplate(authTm);

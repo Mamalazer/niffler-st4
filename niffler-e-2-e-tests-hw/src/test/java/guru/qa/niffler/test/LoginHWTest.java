@@ -2,7 +2,7 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.db.model.UserAuthEntity;
+import guru.qa.niffler.db.models.UserAuthEntity;
 import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;

@@ -1,8 +1,8 @@
-package guru.qa.niffler.db.model.sjdbc;
+package guru.qa.niffler.db.models.sjdbc;
 
-import guru.qa.niffler.db.model.Authority;
-import guru.qa.niffler.db.model.AuthorityEntity;
-import guru.qa.niffler.db.model.UserAuthEntity;
+import guru.qa.niffler.db.models.Authority;
+import guru.qa.niffler.db.models.AuthorityEntity;
+import guru.qa.niffler.db.models.UserAuthEntity;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

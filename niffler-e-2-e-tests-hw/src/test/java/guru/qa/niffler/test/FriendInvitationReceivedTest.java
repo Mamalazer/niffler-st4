@@ -1,6 +1,7 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
@@ -19,7 +20,7 @@ public class FriendInvitationReceivedTest extends BaseWebTest {
 
     @BeforeEach
     void doLogin() {
-        Selenide.open("http://127.0.0.1:3000/main");
+        Selenide.open(Config.getInstance().frontUrl());
         welcomePage.goToLoginPage();
     }
 
