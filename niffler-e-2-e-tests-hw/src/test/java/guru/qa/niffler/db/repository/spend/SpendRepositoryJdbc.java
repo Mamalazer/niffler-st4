@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositoryJdbc implements SpendRepository {
@@ -71,5 +72,30 @@ public class SpendRepositoryJdbc implements SpendRepository {
             throw new RuntimeException(e);
         }
         return category;
+    }
+
+    @Override
+    public Optional<CategoryEntity> selectCategory(String categoryName, String userName) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+
+        try (Connection conn = spendDs.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM category WHERE category = ? AND username = ?")) {
+                ps.setString(1, categoryName);
+                ps.setString(2, userName);
+
+                try (ResultSet set = ps.executeQuery()) {
+                    if (set.next()) {
+                        categoryEntity.setId(UUID.fromString(set.getString("id")));
+                        categoryEntity.setCategory(set.getString("category"));
+                        categoryEntity.setUsername(set.getString("username"));
+                    } else {
+                        throw new IllegalStateException("Can`t find row in category table");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.of(categoryEntity);
     }
 }

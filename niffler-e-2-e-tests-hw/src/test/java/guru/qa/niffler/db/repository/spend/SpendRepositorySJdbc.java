@@ -2,13 +2,16 @@ package guru.qa.niffler.db.repository.spend;
 
 import guru.qa.niffler.db.DataSourceProvider;
 import guru.qa.niffler.db.Database;
+import guru.qa.niffler.db.models.sjdbc.CategoryEntityRowMapper;
 import guru.qa.niffler.db.models.spend.CategoryEntity;
 import guru.qa.niffler.db.models.spend.SpendEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositorySJdbc implements SpendRepository {
@@ -51,5 +54,21 @@ public class SpendRepositorySJdbc implements SpendRepository {
 
         category.setId((UUID) kh.getKeys().get("id"));
         return category;
+    }
+
+    @Override
+    public Optional<CategoryEntity> selectCategory(String categoryName, String userName) {
+        try {
+            return Optional.ofNullable(
+                    spendTemplate.queryForObject(
+                            "SELECT * FROM category WHERE category = ? AND username = ?",
+                            CategoryEntityRowMapper.instance,
+                            categoryName,
+                            userName
+                    )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }

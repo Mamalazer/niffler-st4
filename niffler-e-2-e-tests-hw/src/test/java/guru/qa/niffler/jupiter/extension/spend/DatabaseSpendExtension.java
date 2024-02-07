@@ -11,7 +11,6 @@ import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.Optional;
-import java.util.UUID;
 
 public class DatabaseSpendExtension extends SpendExtension implements BeforeEachCallback, ParameterResolver {
 
@@ -26,7 +25,10 @@ public class DatabaseSpendExtension extends SpendExtension implements BeforeEach
         SpendEntity spendEntity = new SpendEntity();
         CategoryEntity category = new CategoryEntity();
 
-        category.setId(UUID.fromString("7c42541f-230d-4fa0-bf37-d1209affcfcc"));
+        category.setCategory(spend.category());
+        category.setUsername(spend.username());
+
+        category = userRepository.createCategory(category);
 
         spendEntity.setUsername(spend.username());
         spendEntity.setCurrency(spend.currency());

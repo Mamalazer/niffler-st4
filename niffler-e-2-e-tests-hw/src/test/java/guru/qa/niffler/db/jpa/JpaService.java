@@ -3,6 +3,7 @@ package guru.qa.niffler.db.jpa;
 import guru.qa.niffler.db.Database;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,5 +62,15 @@ public abstract class JpaService {
       transaction.rollback();
       throw e;
     }
+  }
+
+  protected <T> T select(Database database, String hql, Map<String, String> columnsAndArgs) {
+    Query query = emStore.get(database).createQuery(hql);
+
+    for (Map.Entry<String, String> entry : columnsAndArgs.entrySet()) {
+      query.setParameter(entry.getKey(), entry.getValue());
+    }
+
+    return (T) query.getSingleResult();
   }
 }

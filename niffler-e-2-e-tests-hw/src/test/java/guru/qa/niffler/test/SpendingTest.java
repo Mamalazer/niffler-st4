@@ -4,7 +4,6 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.models.user.UserAuthEntity;
 import guru.qa.niffler.jupiter.annotation.DbUser;
-import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
 import guru.qa.niffler.model.CurrencyValues;
@@ -30,10 +29,6 @@ public class SpendingTest extends BaseWebTest {
             .doLogin(userAuth.getUsername(), userAuth.getPassword());
   }
 
-  @GenerateCategory(
-      category = "Обучение",
-      username = "duck"
-  )
   @GenerateSpend(
       username = "duck",
       description = "QA.GURU Advanced 4",
