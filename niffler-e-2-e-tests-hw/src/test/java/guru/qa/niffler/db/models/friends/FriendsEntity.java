@@ -1,5 +1,6 @@
-package guru.qa.niffler.db.models;
+package guru.qa.niffler.db.models.friends;
 
+import guru.qa.niffler.db.models.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

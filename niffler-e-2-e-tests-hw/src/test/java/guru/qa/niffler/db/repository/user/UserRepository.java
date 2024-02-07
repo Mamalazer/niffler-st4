@@ -1,7 +1,7 @@
-package guru.qa.niffler.db.repository;
+package guru.qa.niffler.db.repository.user;
 
-import guru.qa.niffler.db.models.UserAuthEntity;
-import guru.qa.niffler.db.models.UserEntity;
+import guru.qa.niffler.db.models.user.UserAuthEntity;
+import guru.qa.niffler.db.models.user.UserEntity;
 
 import java.util.Optional;
 import java.util.UUID;

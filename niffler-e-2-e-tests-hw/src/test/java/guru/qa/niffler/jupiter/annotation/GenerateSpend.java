@@ -1,7 +1,6 @@
 package guru.qa.niffler.jupiter.annotation;
 
-import guru.qa.niffler.jupiter.extension.spend.SpendExtension;
-import guru.qa.niffler.jupiter.extension.spend.SpendResolverExtension;
+import guru.qa.niffler.jupiter.extension.spend.RestSpendExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -12,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith({SpendExtension.class, SpendResolverExtension.class})
+@ExtendWith({RestSpendExtension.class})
 public @interface GenerateSpend {
 
   String username();
@@ -24,4 +23,6 @@ public @interface GenerateSpend {
   double amount();
 
   CurrencyValues currency();
+
+  String spendDate();
 }

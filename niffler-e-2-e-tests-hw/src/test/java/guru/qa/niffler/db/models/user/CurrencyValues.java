@@ -1,4 +1,4 @@
-package guru.qa.niffler.db.models;
+package guru.qa.niffler.db.models.user;
 
 public enum CurrencyValues {
   RUB, USD, EUR, KZT

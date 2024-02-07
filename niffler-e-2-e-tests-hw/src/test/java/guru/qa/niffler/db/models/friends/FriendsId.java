@@ -1,4 +1,4 @@
-package guru.qa.niffler.db.models;
+package guru.qa.niffler.db.models.friends;
 
 import java.io.Serializable;
 import java.util.Objects;

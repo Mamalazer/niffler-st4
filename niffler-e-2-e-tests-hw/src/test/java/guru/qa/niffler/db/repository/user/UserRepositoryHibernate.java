@@ -1,9 +1,9 @@
-package guru.qa.niffler.db.repository;
+package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.EmfProvider;
 import guru.qa.niffler.db.jpa.JpaService;
-import guru.qa.niffler.db.models.UserAuthEntity;
-import guru.qa.niffler.db.models.UserEntity;
+import guru.qa.niffler.db.models.user.UserAuthEntity;
+import guru.qa.niffler.db.models.user.UserEntity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,4 +1,4 @@
-package guru.qa.niffler.db.models;
+package guru.qa.niffler.db.models.user;
 
 import lombok.Getter;
 import lombok.Setter;

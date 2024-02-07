@@ -1,9 +1,9 @@
 package guru.qa.niffler.jupiter.extension.user;
 
 import com.github.javafaker.Faker;
-import guru.qa.niffler.config.DbRepositoryConfig;
-import guru.qa.niffler.db.models.*;
-import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.config.DbUserRepositoryConfig;
+import guru.qa.niffler.db.models.user.*;
+import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.jupiter.annotation.DbUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
@@ -17,7 +17,7 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
 
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserCreateExtension.class);
 
-    private final UserRepository userRepository = DbRepositoryConfig.getDbConfig();
+    private final UserRepository userRepository = DbUserRepositoryConfig.getDbConfig();
     private final Faker faker = new Faker();
 
     @Override
