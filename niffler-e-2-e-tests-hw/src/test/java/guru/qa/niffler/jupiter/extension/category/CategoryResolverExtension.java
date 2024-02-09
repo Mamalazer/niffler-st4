@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension.category;
 
-import guru.qa.niffler.jupiter.extension.spend.SpendExtension;
+import guru.qa.niffler.jupiter.extension.spend.RestSpendExtension;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -18,7 +18,7 @@ public class CategoryResolverExtension  implements ParameterResolver {
 
     @Override
     public CategoryJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(SpendExtension.NAMESPACE)
+        return extensionContext.getStore(RestSpendExtension.NAMESPACE)
                 .get(extensionContext.getUniqueId(), CategoryJson.class);
     }
 }

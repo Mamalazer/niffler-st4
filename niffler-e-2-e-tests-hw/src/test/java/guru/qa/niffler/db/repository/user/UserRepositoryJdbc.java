@@ -1,8 +1,8 @@
-package guru.qa.niffler.db.repository;
+package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.DataSourceProvider;
-import guru.qa.niffler.db.JdbcUrl;
-import guru.qa.niffler.db.model.*;
+import guru.qa.niffler.db.Database;
+import guru.qa.niffler.db.models.user.*;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public class UserRepositoryJdbc implements UserRepository {
 
-  private final DataSource authDs = DataSourceProvider.INSTANCE.dataSource(JdbcUrl.AUTH);
-  private final DataSource udDs = DataSourceProvider.INSTANCE.dataSource(JdbcUrl.USERDATA);
+  private final DataSource authDs = DataSourceProvider.INSTANCE.dataSource(Database.AUTH);
+  private final DataSource udDs = DataSourceProvider.INSTANCE.dataSource(Database.USERDATA);
 
   private final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 

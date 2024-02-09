@@ -1,9 +1,9 @@
 package guru.qa.niffler.jupiter.extension.user;
 
 import com.github.javafaker.Faker;
-import guru.qa.niffler.config.DbRepositoryConfig;
-import guru.qa.niffler.db.model.*;
-import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.config.DbUserRepositoryConfig;
+import guru.qa.niffler.db.models.user.*;
+import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.jupiter.annotation.DbUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
@@ -17,7 +17,7 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
 
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserCreateExtension.class);
 
-    private final UserRepository userRepository = DbRepositoryConfig.getDbConfig();
+    private final UserRepository userRepository = DbUserRepositoryConfig.getDbConfig();
     private final Faker faker = new Faker();
 
     @Override
@@ -60,13 +60,15 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
             userAuth.setAccountNonExpired(true);
             userAuth.setAccountNonLocked(true);
             userAuth.setCredentialsNonExpired(true);
-            userAuth.setAuthorities(Arrays.stream(Authority.values())
-                    .map(e -> {
+            AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
+                    a -> {
                         AuthorityEntity ae = new AuthorityEntity();
-                        ae.setAuthority(e);
+                        ae.setAuthority(a);
                         return ae;
-                    }).toList()
-            );
+                    }
+            ).toArray(AuthorityEntity[]::new);
+
+            userAuth.addAuthorities(authorities);
 
             userEntity = new UserEntity();
             userEntity.setUsername(username);

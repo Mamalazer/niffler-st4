@@ -1,10 +1,11 @@
 package guru.qa.niffler.config;
 
-import guru.qa.niffler.db.repository.UserRepository;
-import guru.qa.niffler.db.repository.UserRepositoryJdbc;
-import guru.qa.niffler.db.repository.UserRepositorySJdbc;
+import guru.qa.niffler.db.repository.user.UserRepository;
+import guru.qa.niffler.db.repository.user.UserRepositoryHibernate;
+import guru.qa.niffler.db.repository.user.UserRepositoryJdbc;
+import guru.qa.niffler.db.repository.user.UserRepositorySJdbc;
 
-public class DbRepositoryConfig {
+public class DbUserRepositoryConfig {
 
     public static UserRepository getDbConfig() {
         String repository = System.getProperty("repository");
@@ -13,6 +14,8 @@ public class DbRepositoryConfig {
             return new UserRepositoryJdbc();
         } else if ("sjdbc".equals(repository)) {
             return new UserRepositorySJdbc();
+        } else if ("hibernate".equals(repository)) {
+            return new UserRepositoryHibernate();
         } else {
             throw new IllegalArgumentException("Unknown repository argument");
         }

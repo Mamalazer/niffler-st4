@@ -1,8 +1,8 @@
-package guru.qa.niffler.db.model.sjdbc;
+package guru.qa.niffler.db.models.sjdbc;
 
-import guru.qa.niffler.db.model.Authority;
-import guru.qa.niffler.db.model.AuthorityEntity;
-import guru.qa.niffler.db.model.UserAuthEntity;
+import guru.qa.niffler.db.models.user.Authority;
+import guru.qa.niffler.db.models.user.AuthorityEntity;
+import guru.qa.niffler.db.models.user.UserAuthEntity;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
