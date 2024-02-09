@@ -75,7 +75,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
     }
 
     @Override
-    public Optional<CategoryEntity> selectCategory(String categoryName, String userName) {
+    public Optional<CategoryEntity> findCategory(String categoryName, String userName) {
         CategoryEntity categoryEntity = new CategoryEntity();
 
         try (Connection conn = spendDs.getConnection()) {

@@ -6,6 +6,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -64,13 +65,13 @@ public abstract class JpaService {
     }
   }
 
-  protected <T> T select(Database database, String hql, Map<String, String> columnsAndArgs) {
+  protected <T> List<T> select(Database database, String hql, Map<String, String> columnsAndArgs) {
     Query query = emStore.get(database).createQuery(hql);
 
     for (Map.Entry<String, String> entry : columnsAndArgs.entrySet()) {
       query.setParameter(entry.getKey(), entry.getValue());
     }
 
-    return (T) query.getSingleResult();
+    return (List<T>) query.getResultList();
   }
 }

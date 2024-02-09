@@ -57,7 +57,7 @@ public class SpendRepositorySJdbc implements SpendRepository {
     }
 
     @Override
-    public Optional<CategoryEntity> selectCategory(String categoryName, String userName) {
+    public Optional<CategoryEntity> findCategory(String categoryName, String userName) {
         try {
             return Optional.ofNullable(
                     spendTemplate.queryForObject(

@@ -11,5 +11,5 @@ public interface SpendRepository {
 
     CategoryEntity createCategory(CategoryEntity category);
 
-    Optional<CategoryEntity> selectCategory(String categoryName, String userName);
+    Optional<CategoryEntity> findCategory(String categoryName, String userName);
 }

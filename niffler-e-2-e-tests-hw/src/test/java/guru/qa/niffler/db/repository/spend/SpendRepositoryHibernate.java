@@ -31,11 +31,11 @@ public class SpendRepositoryHibernate extends JpaService implements SpendReposit
     }
 
     @Override
-    public Optional<CategoryEntity> selectCategory(String categoryName, String userName) {
-        return Optional.of(select(
+    public Optional<CategoryEntity> findCategory(String categoryName, String userName) {
+        return Optional.of((CategoryEntity) select(
                 SPEND,
                 "FROM CategoryEntity c WHERE c.category = :category AND c.username = :username",
                 Map.of("category", categoryName, "username", userName)
-        ));
+        ).get(0));
     }
 }
