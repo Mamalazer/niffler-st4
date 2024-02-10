@@ -4,7 +4,7 @@ import guru.qa.niffler.config.DbSpendRepositoryConfig;
 import guru.qa.niffler.db.models.spend.CategoryEntity;
 import guru.qa.niffler.db.models.spend.SpendEntity;
 import guru.qa.niffler.db.repository.spend.SpendRepository;
-import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.spend.SpendJson;
 
 public class DatabaseSpendExtension extends SpendExtension {
 

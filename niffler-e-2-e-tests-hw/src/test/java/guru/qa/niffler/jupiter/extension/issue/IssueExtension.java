@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension.issue;
 
-import guru.qa.niffler.api.GhApiClient;
+import guru.qa.niffler.api.github.GhApiClient;
 import guru.qa.niffler.jupiter.annotation.DisabledByIssue;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.extension.ConditionEvaluationResult;

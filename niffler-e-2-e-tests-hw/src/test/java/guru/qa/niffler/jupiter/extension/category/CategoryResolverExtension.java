@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension.category;
 
 import guru.qa.niffler.jupiter.extension.spend.RestSpendExtension;
-import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.category.CategoryJson;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
