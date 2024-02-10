@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter;
 
+import guru.qa.niffler.jupiter.extension.SpendExtension;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;

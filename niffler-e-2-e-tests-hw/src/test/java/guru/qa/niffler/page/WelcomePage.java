@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class WelcomePage {
+public class WelcomePage extends BasePage<WelcomePage> {
 
     private final SelenideElement loginButton = $("a[href*='redirect']");
     private final SelenideElement registerButton = $("a[href*='auth']");
