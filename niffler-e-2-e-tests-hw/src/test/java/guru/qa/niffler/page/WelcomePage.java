@@ -15,4 +15,10 @@ public class WelcomePage extends BasePage<WelcomePage> {
         loginButton.click();
         return new LoginPage();
     }
+
+    @Step("Перейти к странице регистрации")
+    public RegisterPage goToRegisterPage() {
+        registerButton.click();
+        return new RegisterPage();
+    }
 }
