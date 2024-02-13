@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage> {
 
     private final String submitInvitationButton = "//*[@data-tooltip-id = 'submit-invitation']";
     private final String declineInvitationButton = "//*[@data-tooltip-id = 'decline-invitation']";

@@ -1,4 +1,4 @@
-package guru.qa.niffler.jupiter.extension.allure;
+package guru.qa.niffler.jupiter.converter;
 
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.extension.ParameterContext;

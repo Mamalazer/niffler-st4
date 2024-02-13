@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginPage {
+public class LoginPage extends BasePage<LoginPage> {
 
     private final SelenideElement usernameField = $("input[name='username']");
     private final SelenideElement passwordField = $("input[name='password']");
