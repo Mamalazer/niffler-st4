@@ -27,7 +27,7 @@ public class FriendsInvitationSendTest extends BaseWebTest {
     @Test
     @DisplayName("У пользователя на странице со списком всех пользователей отображается, что отправлено приглашение в друзья")
     void userHasSendedInviteInAllPeoplePage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
-        loginPage.doLogin(user1.username(), user1.testData().password())
+        loginPage.doSuccessfulLogin(user1.username(), user1.testData().password())
                 .header.goToAllPeoplePage()
                 .checkThatInvitationSend(user2.username());
     }
@@ -35,7 +35,7 @@ public class FriendsInvitationSendTest extends BaseWebTest {
     @Test
     @DisplayName("У пользователя на странице со списком всех друзей не отображается пользователь, которому отправлено приглашение в друзья")
     void userHasntInvitedUserInFriendsPage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
-        loginPage.doLogin(user1.username(), user1.testData().password())
+        loginPage.doSuccessfulLogin(user1.username(), user1.testData().password())
                 .header.goToFriendsPage()
                 .checkThatInfoAboutUserNotExist(user2.username());
     }

@@ -17,4 +17,10 @@ public class HeaderPage extends BasePage<HeaderPage> {
         $x("//a[contains(@href, 'friends')]").click();
         return new FriendsPage();
     }
+
+    @Step("Перейти на страницу профиля")
+    public ProfilePage goToProfilePage() {
+        $x("//a[contains(@href, 'profile')]").click();
+        return new ProfilePage();
+    }
 }
