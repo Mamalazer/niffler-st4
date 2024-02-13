@@ -21,16 +21,16 @@ public class SpendingTest extends BaseWebTest {
   protected WelcomePage welcomePage = new WelcomePage();
   protected MainPage mainPage = new MainPage();
 
-  @DbUser(username = "duck", password = "12345")
+  @DbUser(username = "bober", password = "12345")
   @BeforeEach
   void doLogin(UserAuthEntity userAuth) {
     Selenide.open(Config.getInstance().frontUrl());
     welcomePage.goToLoginPage()
-            .doLogin(userAuth.getUsername(), userAuth.getPassword());
+            .doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword());
   }
 
   @GenerateSpend(
-      username = "duck",
+      username = "bober",
       description = "QA.GURU Advanced 4",
       amount = 72500.00,
       category = "Обучение",

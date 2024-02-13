@@ -20,7 +20,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
     private final SelenideElement addCategoryBtn = $(".add-category__input-container button");
     private final ElementsCollection categories = $$(".categories__list .categories__item");
 
-
+    public HeaderPage header = new HeaderPage();
 
     @Step("Загрузить аватар")
     public ProfilePage uploadAvatarFromClasspath(String classpath) {

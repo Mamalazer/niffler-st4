@@ -26,7 +26,7 @@ public class FriendsExistTest extends BaseWebTest{
     @Test
     @DisplayName("У пользователя на странице со списком друзей отображается друг")
     void userHasFriendInFriendsPage(@User(WITH_FRIENDS) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+        loginPage.doSuccessfulLogin(user.username(), user.testData().password())
                 .header.goToFriendsPage()
                 .checkThatUserIsFriend("elephant");
     }
@@ -34,7 +34,7 @@ public class FriendsExistTest extends BaseWebTest{
     @Test
     @DisplayName("У пользователя на странице со списком всех пользователей отображается друг")
     void userHasFriendInAllPeoplePage(@User(WITH_FRIENDS) UserJson user) {
-        loginPage.doLogin(user.username(), user.testData().password())
+        loginPage.doSuccessfulLogin(user.username(), user.testData().password())
                 .header.goToAllPeoplePage()
                 .checkThatUserIsFriend("dima");
     }
