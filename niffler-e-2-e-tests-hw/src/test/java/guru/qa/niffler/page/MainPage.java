@@ -1,6 +1,7 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.page.component.SpendingTable;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -11,12 +12,13 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class MainPage extends BasePage<MainPage> {
 
-    private final SelenideElement spendingTable = $(".spendings-table tbody");
+    private final SelenideElement spendsTable = $(".spendings-table tbody");
+    private final SpendingTable spendingTable = new SpendingTable();
     public HeaderPage header = new HeaderPage();
 
     @Step("Выбрать трату по описанию '{description}'")
     public MainPage selectSpendingByDescription(String description) {
-        spendingTable
+        spendsTable
                 .$$("tr")
                 .find(text(description))
                 .$("td")
@@ -34,7 +36,7 @@ public class MainPage extends BasePage<MainPage> {
 
     @Step("Убедиться, что траты отсутствуют")
     public MainPage checkThatSpendingsEmpty() {
-        spendingTable
+        spendsTable
                 .$$("tr")
                 .shouldHave(size(0));
         return this;
@@ -44,5 +46,9 @@ public class MainPage extends BasePage<MainPage> {
     public MainPage checkIsLoaded() {
         $(".main-content").shouldBe(visible);
         return this;
+    }
+
+    public SpendingTable getSpendingTable() {
+        return spendingTable;
     }
 }

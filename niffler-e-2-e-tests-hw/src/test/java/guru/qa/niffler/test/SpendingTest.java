@@ -45,4 +45,20 @@ public class SpendingTest extends BaseWebTest {
             .deleteSelectedSpendings()
             .checkThatSpendingsEmpty();
   }
+
+  @GenerateSpend(
+          username = "bober",
+          description = "Лечение зубов",
+          amount = 10000.00,
+          category = "Лечение",
+          currency = CurrencyValues.RUB,
+          spendDate = "2024-02-15"
+  )
+  @Test
+  @DisplayName("Проверка трат")
+  void checkSpendingTableInfo(SpendJson spend) {
+
+    mainPage.getSpendingTable()
+            .checkSpends(spend);
+  }
 }

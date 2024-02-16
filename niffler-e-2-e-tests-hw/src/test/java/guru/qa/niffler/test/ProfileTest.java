@@ -36,8 +36,12 @@ public class ProfileTest extends BaseWebTest {
     @DisplayName("Добавление аватара")
     @Test
     void setUserAvatar(UserAuthEntity userAuth) {
+        String avatarPath = "test-data/avatar.jpeg";
+
         loginPage.doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword())
                 .header.goToProfilePage()
-                .uploadAvatarFromClasspath("test-data/avatar.jpeg");
+                .uploadAvatarFromClasspath(avatarPath)
+                .submitData()
+                .header.checkAvatar(avatarPath);
     }
 }
