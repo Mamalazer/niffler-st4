@@ -1,44 +1,22 @@
 package guru.qa.niffler.page;
 
-import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.component.SpendingTable;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class MainPage extends BasePage<MainPage> {
 
-    private final SelenideElement spendsTable = $(".spendings-table tbody");
     private final SpendingTable spendingTable = new SpendingTable();
     public HeaderPage header = new HeaderPage();
-
-    @Step("Выбрать трату по описанию '{description}'")
-    public MainPage selectSpendingByDescription(String description) {
-        spendsTable
-                .$$("tr")
-                .find(text(description))
-                .$("td")
-                .scrollTo()
-                .click();
-        return this;
-    }
 
     @Step("Удалить выбранные траты")
     public MainPage deleteSelectedSpendings() {
         $(byText("Delete selected"))
                 .click();
-        return this;
-    }
-
-    @Step("Убедиться, что траты отсутствуют")
-    public MainPage checkThatSpendingsEmpty() {
-        spendsTable
-                .$$("tr")
-                .shouldHave(size(0));
         return this;
     }
 
@@ -50,5 +28,29 @@ public class MainPage extends BasePage<MainPage> {
 
     public SpendingTable getSpendingTable() {
         return spendingTable;
+    }
+
+    @Step("Показать сегодняшние траты")
+    public MainPage showTodaySpends() {
+        $x("//button[text() = 'Today']").click();
+        return this;
+    }
+
+    @Step("Показать траты за последнюю неделю")
+    public MainPage showLastWeekSpends() {
+        $x("//button[text() = 'Last week']").click();
+        return this;
+    }
+
+    @Step("Показать траты за последний месяц")
+    public MainPage showLastMonthSpends() {
+        $x("//button[text() = 'Last month']").click();
+        return this;
+    }
+
+    @Step("Показать траты за всё время")
+    public MainPage showAllTimeSpends() {
+        $x("//button[text() = 'All time']").click();
+        return this;
     }
 }

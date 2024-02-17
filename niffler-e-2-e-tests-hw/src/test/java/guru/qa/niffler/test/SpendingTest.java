@@ -19,16 +19,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class SpendingTest extends BaseWebTest {
 
   protected WelcomePage welcomePage = new WelcomePage();
-  protected MainPage mainPage = new MainPage();
 
-  @DbUser(username = "bober", password = "12345")
   @BeforeEach
-  void doLogin(UserAuthEntity userAuth) {
+  void doLogin() {
     Selenide.open(Config.getInstance().frontUrl());
-    welcomePage.goToLoginPage()
-            .doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword());
   }
 
+  @DbUser(username = "bober", password = "12345")
   @GenerateSpend(
       username = "bober",
       description = "QA.GURU Advanced 4",
@@ -39,15 +36,20 @@ public class SpendingTest extends BaseWebTest {
   )
   @Test
   @DisplayName("Проверка удаления траты")
-  void spendingShouldBeDeletedByButtonDeleteSpending(SpendJson spend) {
-
-    mainPage.selectSpendingByDescription(spend.description())
+  void spendingShouldBeDeletedByButtonDeleteSpending(UserAuthEntity userAuth, SpendJson spend) {
+    welcomePage.goToLoginPage()
+            .doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword())
+            .getSpendingTable()
+            .selectSpendingByText(spend.description())
+            .returnFocusToPage(MainPage.class)
             .deleteSelectedSpendings()
+            .getSpendingTable()
             .checkThatSpendingsEmpty();
   }
 
+  @DbUser(username = "firefly", password = "12345")
   @GenerateSpend(
-          username = "bober",
+          username = "firefly",
           description = "Лечение зубов",
           amount = 10000.00,
           category = "Лечение",
@@ -56,9 +58,10 @@ public class SpendingTest extends BaseWebTest {
   )
   @Test
   @DisplayName("Проверка трат")
-  void checkSpendingTableInfo(SpendJson spend) {
-
-    mainPage.getSpendingTable()
+  void checkSpendingTableInfo(UserAuthEntity userAuth, SpendJson spend) {
+    welcomePage.goToLoginPage()
+            .doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword())
+            .getSpendingTable()
             .checkSpends(spend);
   }
 }
