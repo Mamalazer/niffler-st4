@@ -5,6 +5,7 @@ import guru.qa.niffler.config.DbUserRepositoryConfig;
 import guru.qa.niffler.db.models.user.*;
 import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.utils.allure.JsonAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
 
@@ -18,6 +19,7 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserCreateExtension.class);
 
     private final UserRepository userRepository = DbUserRepositoryConfig.getDbConfig();
+    private final JsonAppender jsonAppender = new JsonAppender();
     private final Faker faker = new Faker();
 
     @Override
@@ -78,6 +80,8 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
             userAuthInfo.setUserEntity(userEntity);
             userAuthInfo.setUserAuth(userAuth);
             actualUsers.add(username);
+
+            jsonAppender.attachJson("User info", userEntity);
         }
 
         extensionContext.getStore(NAMESPACE).put(extensionContext.getUniqueId(), userAuthInfo);

@@ -18,7 +18,6 @@ public class UserRepositoryJdbc implements UserRepository {
 
   private final DataSource authDs = DataSourceProvider.INSTANCE.dataSource(Database.AUTH);
   private final DataSource udDs = DataSourceProvider.INSTANCE.dataSource(Database.USERDATA);
-
   private final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
   @Override
