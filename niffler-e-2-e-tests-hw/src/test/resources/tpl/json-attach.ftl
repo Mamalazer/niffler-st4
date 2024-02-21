@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<h5>Json data</h5>
+<h5>${data.name}</h5>
 <div>
     <pre><code>${data.json}</code></pre>
 </div>
