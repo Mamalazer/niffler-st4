@@ -13,7 +13,13 @@ public class DockerConfig implements Config {
   }
 
   @Override
+  public String authUrl() {
+    return "http://auth.niffler.dc:9000";
+  }
+
+  @Override
   public String jdbcHost() {
-    return "niffler-all-db";
+//    return "niffler-all-db";
+    return "localhost";
   }
 }
