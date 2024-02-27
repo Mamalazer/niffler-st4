@@ -15,4 +15,5 @@ public @interface DbUser {
 
     String username() default "";
     String password() default "";
+    boolean isRunnable() default false;
 }

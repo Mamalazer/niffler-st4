@@ -18,14 +18,14 @@ public class ApiLoginTest extends BaseWebTest {
         Selenide.open(Config.getInstance().frontUrl());
     }
 
-    @ApiLogin(user = @DbUser(username = "dog", password = "12345"))
+    @ApiLogin(user = @DbUser(username = "dog", password = "12345", isRunnable = true))
     @DisplayName("Успешный логин 1")
     @Test
     void successfulApiLogin() {
         mainPage.checkIsLoaded();
     }
 
-    @ApiLogin(user = @DbUser)
+    @ApiLogin(user = @DbUser(isRunnable = true))
     @DisplayName("Успешный логин 2")
     @Test
     void successfulApiLogin02() {

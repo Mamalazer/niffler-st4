@@ -39,7 +39,7 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
       setCodeVerifier(extensionContext, codeVerifier);
       setCodChallenge(extensionContext, codeChallenge);
 
-      if (apiLogin.user() != null) {
+      if (apiLogin.user().isRunnable()) {
         ExtensionContext userExtensionContext = ContextHolderExtension.Holder.INSTANCE.context();
         UserAuthEntity userEnity = userExtensionContext.getStore(UserCreateExtension.NAMESPACE)
                 .get(userExtensionContext.getUniqueId(), UserAuthInfo.class)
