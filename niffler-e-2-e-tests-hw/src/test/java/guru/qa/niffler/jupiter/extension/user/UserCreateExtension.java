@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.config.DbUserRepositoryConfig;
 import guru.qa.niffler.db.models.user.*;
 import guru.qa.niffler.db.repository.user.UserRepository;
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.utils.allure.JsonAppender;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,12 +38,19 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
                 .forEach(actualMethods::add);
 
         List<Method> methods = actualMethods.stream()
-                .filter(method -> method.isAnnotationPresent(DbUser.class))
+                .filter(method -> method.isAnnotationPresent(DbUser.class) || method.isAnnotationPresent(ApiLogin.class))
                 .toList();
 
         for (Method method : methods) {
 
-            DbUser annotation = method.getAnnotation(DbUser.class);
+            DbUser annotation = null;
+
+            if (method.isAnnotationPresent(ApiLogin.class)) {
+                annotation = method.getAnnotation(ApiLogin.class).user();
+            } else if (method.isAnnotationPresent(DbUser.class)) {
+                annotation = method.getAnnotation(DbUser.class);
+            }
+
             String username = annotation.username();
             String password = annotation.password();
 

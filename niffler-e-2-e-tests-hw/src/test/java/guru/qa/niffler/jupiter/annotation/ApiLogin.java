@@ -2,6 +2,7 @@ package guru.qa.niffler.jupiter.annotation;
 
 import guru.qa.niffler.jupiter.extension.context.ContextHolderExtension;
 import guru.qa.niffler.jupiter.extension.login.ApiLoginExtension;
+import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -11,9 +12,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith({ContextHolderExtension.class, ApiLoginExtension.class})
+@ExtendWith({ContextHolderExtension.class, UserCreateExtension.class, ApiLoginExtension.class})
 public @interface ApiLogin {
-  String username();
+  String username() default "";
 
-  String password();
+  String password() default "";
+
+  DbUser user() default @DbUser;
 }
