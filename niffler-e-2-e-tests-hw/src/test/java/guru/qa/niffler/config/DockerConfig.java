@@ -28,4 +28,10 @@ public class DockerConfig implements Config {
 //    return "currency.niffler.dc";
     return "localhost";
   }
+
+  @Override
+  public String spendGrpcHost() {
+//    return "spend.niffler.dc";
+    return "localhost";
+  }
 }
