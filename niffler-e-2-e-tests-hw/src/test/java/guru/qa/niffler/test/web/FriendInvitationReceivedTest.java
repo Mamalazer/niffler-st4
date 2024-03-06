@@ -1,4 +1,4 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_RECIEVED;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_SEND;
 
-public class FriendsInvitationSendTest extends BaseWebTest {
+public class FriendInvitationReceivedTest extends BaseWebTest {
 
     WelcomePage welcomePage = new WelcomePage();
     LoginPage loginPage = new LoginPage();
@@ -25,18 +25,18 @@ public class FriendsInvitationSendTest extends BaseWebTest {
     }
 
     @Test
-    @DisplayName("У пользователя на странице со списком всех пользователей отображается, что отправлено приглашение в друзья")
-    void userHasSendedInviteInAllPeoplePage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
+    @DisplayName("У пользователя отображается приглашение в друзья на странице со списком всех пользователей")
+    void userHasInviteInAllPeoplePage(@User(INVITATION_RECIEVED) UserJson user1, @User(INVITATION_SEND) UserJson user2) {
         loginPage.doSuccessfulLogin(user1.username(), user1.testData().password())
                 .header.goToAllPeoplePage()
-                .checkThatInvitationSend(user2.username());
+                .checkThatInvitationReceived(user2.username());
     }
 
     @Test
-    @DisplayName("У пользователя на странице со списком всех друзей не отображается пользователь, которому отправлено приглашение в друзья")
-    void userHasntInvitedUserInFriendsPage(@User(INVITATION_SEND) UserJson user1, @User(INVITATION_RECIEVED) UserJson user2) {
+    @DisplayName("У пользователя отображается приглашение в друзья на странице с друзьями")
+    void userHasInviteInFriendsPage(@User(INVITATION_RECIEVED) UserJson user1, @User(INVITATION_SEND) UserJson user2) {
         loginPage.doSuccessfulLogin(user1.username(), user1.testData().password())
                 .header.goToFriendsPage()
-                .checkThatInfoAboutUserNotExist(user2.username());
+                .checkThatInvitationReceived(user2.username());
     }
 }

@@ -22,4 +22,10 @@ public class DockerConfig implements Config {
 //    return "niffler-all-db";
     return "localhost";
   }
+
+  @Override
+  public String currencyGrpcHost() {
+//    return "currency.niffler.dc";
+    return "localhost";
+  }
 }
