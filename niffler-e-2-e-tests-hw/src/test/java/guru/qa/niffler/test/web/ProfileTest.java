@@ -3,7 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ public class ProfileTest extends BaseWebTest {
         welcomePage.goToLoginPage();
     }
 
-    @DbUser()
+    @TestUser()
     @DisplayName("Смена имени пользователя")
     @Test
     void changeUserName(UserAuthEntity userAuth) {
@@ -32,7 +32,7 @@ public class ProfileTest extends BaseWebTest {
                 .checkFirstname(userAuth.getUsername());
     }
 
-    @DbUser()
+    @TestUser()
     @DisplayName("Добавление аватара")
     @Test
     void setUserAvatar(UserAuthEntity userAuth) {

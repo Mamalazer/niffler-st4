@@ -3,8 +3,8 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
 import guru.qa.niffler.model.currency.CurrencyValues;
 import guru.qa.niffler.model.spend.SpendJson;
@@ -25,7 +25,7 @@ public class SpendingTest extends BaseWebTest {
     Selenide.open(Config.getInstance().frontUrl());
   }
 
-  @DbUser(username = "bober", password = "12345")
+  @TestUser(username = "bober", password = "12345")
   @GenerateSpend(
       username = "bober",
       description = "QA.GURU Advanced 4",
@@ -47,7 +47,7 @@ public class SpendingTest extends BaseWebTest {
             .checkThatSpendingsEmpty();
   }
 
-  @DbUser(username = "firefly", password = "12345")
+  @TestUser(username = "firefly", password = "12345")
   @GenerateSpend(
           username = "firefly",
           description = "Лечение зубов",

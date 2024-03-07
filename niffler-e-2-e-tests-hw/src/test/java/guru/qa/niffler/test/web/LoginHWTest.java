@@ -3,7 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ public class LoginHWTest extends BaseWebTest {
     welcomePage.goToLoginPage();
   }
 
-  @DbUser(username = "dog", password = "12345")
+  @TestUser(username = "dog", password = "12345")
   @DisplayName("Успешный логин")
   @Test
   void successfulLogin(UserAuthEntity userAuth) {
@@ -29,7 +29,7 @@ public class LoginHWTest extends BaseWebTest {
             .checkIsLoaded();
   }
 
-  @DbUser()
+  @TestUser()
   @DisplayName("Успешный логин с помощью создания случайного пользователя")
   @Test
   void successfulLoginWithRandomUser(UserAuthEntity userAuth) {
@@ -37,7 +37,7 @@ public class LoginHWTest extends BaseWebTest {
             .checkIsLoaded();
   }
 
-  @DbUser()
+  @TestUser()
   @Test
   @DisplayName("Неуспешный логин. Введён неверный пароль")
   void unsuccessfulLoginWithAnotherPassword(UserAuthEntity userAuth) {
@@ -45,7 +45,7 @@ public class LoginHWTest extends BaseWebTest {
             .checkError();
   }
 
-  @DbUser()
+  @TestUser()
   @Test
   @DisplayName("Неуспешный логин. Введено неверное имя пользователя")
   void unsuccessfulLoginWithAnotherUserName(UserAuthEntity userAuth) {

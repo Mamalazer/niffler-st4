@@ -5,7 +5,7 @@ import guru.qa.niffler.config.DbUserRepositoryConfig;
 import guru.qa.niffler.db.models.user.*;
 import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.jupiter.annotation.ApiLogin;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.utils.allure.JsonAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserCreateExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
+public abstract class UserCreateExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserCreateExtension.class);
 
@@ -38,21 +38,33 @@ public class UserCreateExtension implements BeforeEachCallback, AfterTestExecuti
                 .forEach(actualMethods::add);
 
         List<Method> methods = actualMethods.stream()
-                .filter(method -> method.isAnnotationPresent(DbUser.class) || method.isAnnotationPresent(ApiLogin.class))
+                .filter(method -> method.isAnnotationPresent(TestUser.class) || method.isAnnotationPresent(ApiLogin.class))
                 .toList();
 
         for (Method method : methods) {
 
-            DbUser annotation = null;
+            TestUser testUserAnno = null;
+            ApiLogin apiLoginAnno = null;
+            String username;
+            String password;
 
             if (method.isAnnotationPresent(ApiLogin.class)) {
-                annotation = method.getAnnotation(ApiLogin.class).user();
-            } else if (method.isAnnotationPresent(DbUser.class)) {
-                annotation = method.getAnnotation(DbUser.class);
+                if (method.getAnnotation(ApiLogin.class).user().isRunnable()) {
+                    testUserAnno = method.getAnnotation(ApiLogin.class).user();
+                } else {
+                    apiLoginAnno = method.getAnnotation(ApiLogin.class);
+                }
+            } else if (method.isAnnotationPresent(TestUser.class)) {
+                testUserAnno = method.getAnnotation(TestUser.class);
             }
 
-            String username = annotation.username();
-            String password = annotation.password();
+            if (testUserAnno != null) {
+                username = testUserAnno.username();
+                password = testUserAnno.password();
+            } else {
+                username = apiLoginAnno.username();
+                password = apiLoginAnno.password();
+            }
 
             if (actualUsers.contains(username)) {
                 continue;

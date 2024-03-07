@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @ExtendWith(UserCreateExtension.class)
-public @interface DbUser {
+public @interface TestUser {
 
     String username() default "";
     String password() default "";
-    boolean isRunnable() default false;
+    boolean isRunnable() default true;
 }

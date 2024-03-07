@@ -18,5 +18,5 @@ public @interface ApiLogin {
 
   String password() default "";
 
-  DbUser user() default @DbUser;
+  TestUser user() default @TestUser(isRunnable = false);
 }
