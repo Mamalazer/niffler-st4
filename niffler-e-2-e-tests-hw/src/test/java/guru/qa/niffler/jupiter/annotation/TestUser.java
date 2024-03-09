@@ -1,8 +1,5 @@
 package guru.qa.niffler.jupiter.annotation;
 
-import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,10 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith(UserCreateExtension.class)
 public @interface TestUser {
+  boolean fake() default false;
 
-    String username() default "";
-    String password() default "";
-    boolean isRunnable() default true;
+  String username() default "";
+
+  String password() default "";
 }
