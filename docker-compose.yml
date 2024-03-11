@@ -107,6 +107,7 @@ services:
     image: ${PREFIX}/niffler-spend-${PROFILE}:latest
     ports:
       - "8093:8093"
+      - "8094:8094"
     restart: always
     depends_on:
       niffler-all-db:
