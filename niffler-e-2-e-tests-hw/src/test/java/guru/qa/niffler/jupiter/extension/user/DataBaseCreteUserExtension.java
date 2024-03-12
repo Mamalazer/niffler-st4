@@ -56,7 +56,9 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
         null,
         new TestData(
             password,
-            null
+            null,
+                null,
+                null
         )
     );
   }

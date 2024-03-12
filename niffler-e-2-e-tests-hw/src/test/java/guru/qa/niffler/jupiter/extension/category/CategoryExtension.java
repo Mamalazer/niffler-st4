@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension.category;
 
 import guru.qa.niffler.api.category.CategoryApiClient;
-import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.model.category.CategoryJson;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -18,13 +18,13 @@ public class CategoryExtension implements BeforeEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        Optional<GenerateCategory> category = AnnotationSupport.findAnnotation(
+        Optional<Category> category = AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
-                GenerateCategory.class
+                Category.class
         );
 
         if (category.isPresent()) {
-            GenerateCategory categoryData = category.get();
+            Category categoryData = category.get();
             CategoryJson categoryJson = new CategoryJson(
                     null,
                     categoryData.category(),

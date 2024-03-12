@@ -2,7 +2,7 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.currency.CurrencyValues;
@@ -26,7 +26,7 @@ public class SpendingTest extends BaseWebTest {
   }
 
   @TestUser(username = "bober", password = "12345")
-  @GenerateSpend(
+  @Spend(
       username = "bober",
       description = "QA.GURU Advanced 4",
       amount = 72500.00,
@@ -48,7 +48,7 @@ public class SpendingTest extends BaseWebTest {
   }
 
   @TestUser(username = "firefly", password = "12345")
-  @GenerateSpend(
+  @Spend(
           username = "firefly",
           description = "Лечение зубов",
           amount = 10000.00,

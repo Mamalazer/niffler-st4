@@ -12,9 +12,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @ExtendWith({CategoryExtension.class, CategoryResolverExtension.class})
-public @interface GenerateCategory {
+public @interface Category {
 
-    String category();
+    boolean fake() default false;
 
-    String username();
+    String category() default "";
+
+    String username() default "";
 }

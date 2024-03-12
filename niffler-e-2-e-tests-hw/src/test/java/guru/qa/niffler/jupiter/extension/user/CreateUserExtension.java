@@ -8,6 +8,8 @@ import guru.qa.niffler.model.userdata.UserJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 public abstract class CreateUserExtension implements BeforeEachCallback, ParameterResolver {
@@ -16,7 +18,7 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
       = ExtensionContext.Namespace.create(CreateUserExtension.class);
 
   @Override
-  public void beforeEach(ExtensionContext extensionContext) {
+  public void beforeEach(ExtensionContext extensionContext) throws IOException, ParseException {
     Map<User.Point, List<TestUser>> usersForTest = extractUsersForTest(extensionContext);
 
     Map<User.Point, List<UserJson>> createdUsers = new HashMap<>();
@@ -31,11 +33,11 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
     extensionContext.getStore(CREATE_USER_NAMESPACE).put(extensionContext.getUniqueId(), createdUsers);
   }
 
-  public abstract UserJson createUser(TestUser user);
+  public abstract UserJson createUser(TestUser user) throws IOException, ParseException;
 
-  public abstract UserJson createCategory(TestUser user, UserJson createdUser);
+  public abstract UserJson createCategory(TestUser user, UserJson createdUser) throws IOException;
 
-  public abstract UserJson createSpend(TestUser user, UserJson createdUser);
+  public abstract UserJson createSpend(TestUser user, UserJson createdUser) throws IOException, ParseException;
 
   @Override
   public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {

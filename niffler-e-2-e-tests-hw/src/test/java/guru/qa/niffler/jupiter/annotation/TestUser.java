@@ -8,9 +8,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface TestUser {
+
   boolean fake() default false;
 
   String username() default "";
 
   String password() default "";
+
+  Category category() default @Category(fake = true);
+
+  Spend spend() default @Spend(fake = true);
 }

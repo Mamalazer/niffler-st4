@@ -9,20 +9,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static guru.qa.niffler.model.currency.CurrencyValues.RUB;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @ExtendWith({RestSpendExtension.class})
-public @interface GenerateSpend {
+public @interface Spend {
 
-  String username();
+  boolean fake() default false;
 
-  String description();
+  String username() default "";
 
-  String category();
+  String description() default "";
 
-  double amount();
+  String category() default "";
 
-  CurrencyValues currency();
+  double amount() default 0;
 
-  String spendDate();
+  CurrencyValues currency() default RUB;
+
+  String spendDate() default "";
 }
