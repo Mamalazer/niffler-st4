@@ -2,11 +2,8 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.annotation.Category;
-import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.currency.CurrencyValues;
 import guru.qa.niffler.model.userdata.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
@@ -27,18 +24,7 @@ public class LoginHWTest extends BaseWebTest {
     welcomePage.goToLoginPage();
   }
 
-  @TestUser(
-          username = "dog", password = "12345",
-          category = @Category(category = "Развлечения", username = "dog"),
-          spend = @Spend(
-                  username = "dog",
-                  description = "Кино",
-                  amount = 72500.00,
-                  category = "Развлечения",
-                  currency = CurrencyValues.RUB,
-                  spendDate = "2024-03-12"
-          )
-  )
+  @TestUser(username = "dog", password = "12345")
   @DisplayName("Успешный логин")
   @Test
   void successfulLogin(@User(OUTER) UserJson userJson) {
