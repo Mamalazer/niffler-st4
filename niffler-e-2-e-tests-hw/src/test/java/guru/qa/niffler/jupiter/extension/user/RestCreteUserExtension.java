@@ -33,16 +33,17 @@ public class RestCreteUserExtension extends CreateUserExtension {
         String password = user.password().isEmpty()
                 ? "12345"
                 : user.password();
-        boolean isRegSuccess = false;
         UserJson createdUser = null;
 
         REGISTER_API_CLIENT.doRegister(username, password);
 
-        while (!isRegSuccess) {
+        for (int i = 0; i < 5; i++) {
             sleep(2000L);
             Response<UserJson> userInfo = USER_DATA_API_CLIENT.getUserInfo(username);
-            isRegSuccess = userInfo.isSuccessful();
-            createdUser = userInfo.body();
+            if (userInfo.isSuccessful()) {
+                createdUser = userInfo.body();
+                break;
+            }
         }
 
         if (!user.category().fake()) {
