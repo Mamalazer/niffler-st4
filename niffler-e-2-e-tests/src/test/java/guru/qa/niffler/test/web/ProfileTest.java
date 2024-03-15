@@ -17,8 +17,8 @@ public class ProfileTest extends BaseWebTest {
 
   @Test
   @TestUsers({
-          @TestUser,
-          @TestUser
+      @TestUser,
+      @TestUser
   })
   @ApiLogin(user = @TestUser)
   void avatarShouldBeDisplayedInHeader(@User() UserJson user,
