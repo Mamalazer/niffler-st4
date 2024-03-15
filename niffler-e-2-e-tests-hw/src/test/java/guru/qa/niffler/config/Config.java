@@ -18,6 +18,8 @@ public interface Config {
 
   String spendGrpcHost();
 
+  String gatewayUrl();
+
   default String jdbcUser() {
     return "postgres";
   }

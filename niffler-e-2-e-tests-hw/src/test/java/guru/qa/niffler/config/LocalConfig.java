@@ -18,6 +18,11 @@ public class LocalConfig implements Config {
   }
 
   @Override
+  public String gatewayUrl() {
+    return "http://127.0.0.1:8090";
+  }
+
+  @Override
   public String jdbcHost() {
     return "localhost";
   }
