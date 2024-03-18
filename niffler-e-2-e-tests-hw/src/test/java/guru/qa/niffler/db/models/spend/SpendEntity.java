@@ -42,7 +42,7 @@ public class SpendEntity implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryEntity category;
 
-    public SpendJson fromEntity() {
+    public SpendJson toJson() {
         return new SpendJson(id, spendDate, category.toJson().category(), currency, amount, description, username);
     }
 

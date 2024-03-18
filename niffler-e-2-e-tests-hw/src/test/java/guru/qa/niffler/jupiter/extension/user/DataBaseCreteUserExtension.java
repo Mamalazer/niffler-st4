@@ -134,7 +134,7 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
                         createdUser.testData() == null ? "" : createdUser.testData().password(),
                         null,
                         createdUser.testData() == null ? null : createdUser.testData().category(),
-                        spendEntity.fromEntity()
+                        spendEntity.toJson()
                 )
         );
     }
