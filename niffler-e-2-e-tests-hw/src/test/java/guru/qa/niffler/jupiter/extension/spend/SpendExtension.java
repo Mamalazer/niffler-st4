@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension.spend;
 
-import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.spend.SpendJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -17,13 +17,13 @@ public abstract class SpendExtension implements BeforeEachCallback, ParameterRes
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        Optional<GenerateSpend> spend = AnnotationSupport.findAnnotation(
+        Optional<Spend> spend = AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
-                GenerateSpend.class
+                Spend.class
         );
 
         if (spend.isPresent()) {
-            GenerateSpend spendData = spend.get();
+            Spend spendData = spend.get();
             SpendJson spendJson = new SpendJson(
                     null,
                     new SimpleDateFormat("yyyy-MM-dd").parse(spendData.spendDate()),

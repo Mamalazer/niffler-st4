@@ -2,13 +2,16 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.model.userdata.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static guru.qa.niffler.jupiter.annotation.User.Point.OUTER;
 
 public class ProfileTest extends BaseWebTest {
 
@@ -21,24 +24,24 @@ public class ProfileTest extends BaseWebTest {
         welcomePage.goToLoginPage();
     }
 
-    @DbUser()
+    @TestUser()
     @DisplayName("Смена имени пользователя")
     @Test
-    void changeUserName(UserAuthEntity userAuth) {
-        loginPage.doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword())
+    void changeUserName(@User(OUTER) UserJson userJson) {
+        loginPage.doSuccessfulLogin(userJson.username(), userJson.testData().password())
                 .header.goToProfilePage()
-                .setFirstname(userAuth.getUsername())
+                .setFirstname(userJson.username())
                 .submitData()
-                .checkFirstname(userAuth.getUsername());
+                .checkFirstname(userJson.username());
     }
 
-    @DbUser()
+    @TestUser()
     @DisplayName("Добавление аватара")
     @Test
-    void setUserAvatar(UserAuthEntity userAuth) {
+    void setUserAvatar(@User(OUTER) UserJson userJson) {
         String avatarPath = "test-data/avatar.jpeg";
 
-        loginPage.doSuccessfulLogin(userAuth.getUsername(), userAuth.getPassword())
+        loginPage.doSuccessfulLogin(userJson.username(), userJson.testData().password())
                 .header.goToProfilePage()
                 .uploadAvatarFromClasspath(avatarPath)
                 .submitData()

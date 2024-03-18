@@ -6,22 +6,25 @@ import com.codeborne.selenide.WebDriverRunner;
 import guru.qa.niffler.api.auth.AuthApiClient;
 import guru.qa.niffler.api.cookie.ThreadSafeCookieManager;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.db.models.user.UserAuthInfo;
 import guru.qa.niffler.jupiter.annotation.ApiLogin;
-import guru.qa.niffler.jupiter.extension.context.ContextHolderExtension;
-import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.Token;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.jupiter.extension.user.CreateUserExtension;
+import guru.qa.niffler.model.userdata.UserJson;
 import guru.qa.niffler.utils.oauth.OauthUtils;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.openqa.selenium.Cookie;
 
-public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecutionCallback {
+import java.util.List;
+import java.util.Map;
+
+public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
   private static final Config CFG = Config.getInstance();
   private final AuthApiClient authApiClient = new AuthApiClient();
+  private boolean initBrowser = true;
 
   public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(ApiLoginExtension.class);
 
@@ -33,43 +36,67 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
         ApiLogin.class
     ).orElse(null);
 
+    final String login;
+    final String password;
+
     if (apiLogin != null) {
+      TestUser testUser = apiLogin.user();
+      if (!testUser.fake()) {
+        UserJson createdUserForApiLogin = getCreatedUserForApiLogin(extensionContext);
+        login = createdUserForApiLogin.username();
+        password = createdUserForApiLogin.testData().password();
+      } else {
+        login = apiLogin.username();
+        password = apiLogin.password();
+      }
+
       final String codeVerifier = OauthUtils.generateCodeVerifier();
       final String codeChallenge = OauthUtils.generateCodeChallange(codeVerifier);
       setCodeVerifier(extensionContext, codeVerifier);
       setCodChallenge(extensionContext, codeChallenge);
+      authApiClient.doLogin(extensionContext, login, password);
 
-      if (apiLogin.user().isRunnable()) {
-        ExtensionContext userExtensionContext = ContextHolderExtension.Holder.INSTANCE.context();
-        UserAuthEntity userEnity = userExtensionContext.getStore(UserCreateExtension.NAMESPACE)
-                .get(userExtensionContext.getUniqueId(), UserAuthInfo.class)
-                .getUserAuth();
-        authApiClient.doLogin(extensionContext, userEnity.getUsername(), userEnity.getPassword());
-      } else {
-        authApiClient.doLogin(extensionContext, apiLogin.username(), apiLogin.password());
+      if (initBrowser) {
+        Selenide.open(CFG.frontUrl());
+        SessionStorage sessionStorage = Selenide.sessionStorage();
+        sessionStorage.setItem(
+            "codeChallenge", getCodChallenge(extensionContext)
+        );
+        sessionStorage.setItem(
+            "id_token", getToken(extensionContext)
+        );
+        sessionStorage.setItem(
+            "codeVerifier", getCodeVerifier(extensionContext)
+        );
+
+        WebDriverRunner.getWebDriver().manage().addCookie(
+            jsessionCookie()
+        );
+        Selenide.refresh();
       }
-
-      Selenide.open(CFG.frontUrl());
-      SessionStorage sessionStorage = Selenide.sessionStorage();
-      sessionStorage.setItem(
-          "codeChallenge", getCodChallenge(extensionContext)
-      );
-      sessionStorage.setItem(
-          "id_token", getToken(extensionContext)
-      );
-      sessionStorage.setItem(
-          "codeVerifier", getCodeVerifier(extensionContext)
-      );
-
-      WebDriverRunner.getWebDriver().manage().addCookie(
-          jsessionCookie()
-      );
-      Selenide.refresh();
     }
   }
 
   @Override
-  public void afterTestExecution(ExtensionContext extensionContext) {
+  public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    return AnnotationSupport.findAnnotation(parameterContext.getParameter(), Token.class).isPresent() &&
+        parameterContext.getParameter().getType().isAssignableFrom(String.class);
+  }
+
+  @Override
+  public String resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    return "Bearer " + getToken(extensionContext);
+  }
+
+  @SuppressWarnings("unchecked")
+  private static UserJson getCreatedUserForApiLogin(ExtensionContext extensionContext) {
+    return ((List<UserJson>) extensionContext.getStore(CreateUserExtension.CREATE_USER_NAMESPACE).get(extensionContext.getUniqueId(), Map.class)
+        .get(User.Point.INNER))
+        .get(0);
+  }
+
+  @Override
+  public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
     ThreadSafeCookieManager.INSTANCE.removeAll();
   }
 

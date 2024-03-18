@@ -7,11 +7,15 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ApiLogin {
+public @interface TestUser {
 
-  TestUser user() default @TestUser(fake = true);
+  boolean fake() default false;
 
   String username() default "";
 
   String password() default "";
+
+  Category category() default @Category(fake = true);
+
+  Spend spend() default @Spend(fake = true);
 }

@@ -1,6 +1,7 @@
 package guru.qa.niffler.jupiter.annotation;
 
-import guru.qa.niffler.jupiter.extension.user.UserCreateExtension;
+import guru.qa.niffler.jupiter.extension.category.CategoryExtension;
+import guru.qa.niffler.jupiter.extension.category.CategoryResolverExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -10,10 +11,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith(UserCreateExtension.class)
-public @interface DbUser {
+@ExtendWith({CategoryExtension.class, CategoryResolverExtension.class})
+public @interface Category {
+
+    boolean fake() default false;
+
+    String category() default "";
 
     String username() default "";
-    String password() default "";
-    boolean isRunnable() default false;
 }

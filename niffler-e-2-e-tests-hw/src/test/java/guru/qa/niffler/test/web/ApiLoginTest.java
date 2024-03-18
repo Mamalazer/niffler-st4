@@ -3,7 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.ApiLogin;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,14 +18,14 @@ public class ApiLoginTest extends BaseWebTest {
         Selenide.open(Config.getInstance().frontUrl());
     }
 
-    @ApiLogin(user = @DbUser(username = "dog", password = "12345", isRunnable = true))
+    @ApiLogin(user = @TestUser(username = "dog", password = "12345"))
     @DisplayName("Успешный логин 1")
     @Test
     void successfulApiLogin() {
         mainPage.checkIsLoaded();
     }
 
-    @ApiLogin(user = @DbUser(isRunnable = true))
+    @ApiLogin(user = @TestUser())
     @DisplayName("Успешный логин 2")
     @Test
     void successfulApiLogin02() {

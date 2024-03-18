@@ -102,6 +102,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     // REST
     testImplementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    testImplementation "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
     testImplementation "com.squareup.retrofit2:converter-jackson:${retrofitVersion}"
     testImplementation "com.squareup.okhttp3:logging-interceptor:${okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-urlconnection:${okhttp3Version}"

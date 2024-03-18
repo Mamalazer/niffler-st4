@@ -1,5 +1,6 @@
 package guru.qa.niffler.db.models.spend;
 
+import guru.qa.niffler.model.category.CategoryJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,19 @@ public class CategoryEntity implements Serializable {
 
     @Column(nullable = false)
     private String username;
+
+    public CategoryJson toJson() {
+        return new CategoryJson(id, category, username);
+    }
+
+    public static CategoryEntity toEntity(CategoryJson categoryJson) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setCategory(categoryJson.category());
+        categoryEntity.setUsername(categoryJson.username());
+        categoryEntity.setId(categoryJson.id());
+
+        return categoryEntity;
+    }
 
     @Override
     public final boolean equals(Object o) {
