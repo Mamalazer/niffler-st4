@@ -32,7 +32,7 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
     String originalPassword = user.getPassword();
     user.setPassword(pe.encode(originalPassword));
     persist(AUTH, user);
-    user.setPassword(originalPassword);
+//    user.setPassword(originalPassword);
     return user;
   }
 
@@ -50,6 +50,21 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
   @Override
   public Optional<UserEntity> selectUserInfoFromUserDataById(UUID id) {
     return Optional.of(entityManager(USERDATA).find(UserEntity.class, id));
+  }
+
+  @Override
+  public Optional<UserEntity> selectUserInfoFromUserDataByName(String userName) {
+    return Optional.empty();
+  }
+
+  @Override
+  public void addFriend(String firstUser, String secondUser) {
+
+  }
+
+  @Override
+  public void createFriendInvite(String fromUser, String toUser) {
+
   }
 
   @Override

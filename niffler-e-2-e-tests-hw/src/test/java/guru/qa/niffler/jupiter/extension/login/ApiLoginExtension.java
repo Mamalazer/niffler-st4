@@ -28,6 +28,13 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
 
   public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(ApiLoginExtension.class);
 
+  public ApiLoginExtension() {
+    this(true);
+  }
+
+  public ApiLoginExtension(boolean initBrowser) {
+    this.initBrowser = initBrowser;
+  }
 
   @Override
   public void beforeEach(ExtensionContext extensionContext) throws Exception {

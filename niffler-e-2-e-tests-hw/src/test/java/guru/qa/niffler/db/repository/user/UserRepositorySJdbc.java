@@ -2,10 +2,10 @@ package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.DataSourceProvider;
 import guru.qa.niffler.db.Database;
-import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.db.models.user.UserEntity;
 import guru.qa.niffler.db.models.sjdbc.UserAuthEntityResultSetExtractor;
 import guru.qa.niffler.db.models.sjdbc.UserEntityRowMapper;
+import guru.qa.niffler.db.models.user.UserAuthEntity;
+import guru.qa.niffler.db.models.user.UserEntity;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -133,6 +133,21 @@ public class UserRepositorySJdbc implements UserRepository {
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Optional<UserEntity> selectUserInfoFromUserDataByName(String userName) {
+    return Optional.empty();
+  }
+
+  @Override
+  public void addFriend(String firstUser, String secondUser) {
+
+  }
+
+  @Override
+  public void createFriendInvite(String fromUser, String toUser) {
+
   }
 
   @Override
