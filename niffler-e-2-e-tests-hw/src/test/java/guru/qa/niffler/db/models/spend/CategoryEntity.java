@@ -26,11 +26,11 @@ public class CategoryEntity implements Serializable {
     @Column(nullable = false)
     private String username;
 
-    public CategoryJson fromEntity() {
+    public CategoryJson toJson() {
         return new CategoryJson(id, category, username);
     }
 
-    public CategoryEntity toEntity(CategoryJson categoryJson) {
+    public static CategoryEntity toEntity(CategoryJson categoryJson) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setCategory(categoryJson.category());
         categoryEntity.setUsername(categoryJson.username());

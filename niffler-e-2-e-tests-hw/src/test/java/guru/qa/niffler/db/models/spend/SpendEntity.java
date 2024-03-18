@@ -43,7 +43,7 @@ public class SpendEntity implements Serializable {
     private CategoryEntity category;
 
     public SpendJson fromEntity() {
-        return new SpendJson(id, spendDate, category.fromEntity().category(), currency, amount, description, username);
+        return new SpendJson(id, spendDate, category.toJson().category(), currency, amount, description, username);
     }
 
     @Override

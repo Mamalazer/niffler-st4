@@ -105,7 +105,7 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
                 new TestData(
                         createdUser.testData() == null ? "" : createdUser.testData().password(),
                         null,
-                        category.fromEntity(),
+                        category.toJson(),
                         createdUser.testData() == null ? null : createdUser.testData().spend()
                 )
         );
@@ -119,7 +119,7 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
         spendEntity.setSpendDate(new SimpleDateFormat("yyyy-MM-dd").parse(user.spend().spendDate()));
         spendEntity.setAmount(user.spend().amount());
         spendEntity.setDescription(user.spend().description());
-        spendEntity.setCategory(new CategoryEntity().toEntity(createdUser.testData().category()));
+        spendEntity.setCategory(CategoryEntity.toEntity(createdUser.testData().category()));
         spendEntity = SPEND_REPOSITORY.createSpend(spendEntity);
 
         return new UserJson(
