@@ -37,8 +37,8 @@ public class RestCreteUserExtension extends CreateUserExtension {
 
         REGISTER_API_CLIENT.doRegister(username, password);
 
-        for (int i = 0; i < 5; i++) {
-            sleep(2000L);
+        for (int i = 0; i < 10; i++) {
+            sleep(500L);
             Response<UserJson> userInfo = USER_DATA_API_CLIENT.getUserInfo(username);
             if (userInfo.isSuccessful()) {
                 createdUser = userInfo.body();
