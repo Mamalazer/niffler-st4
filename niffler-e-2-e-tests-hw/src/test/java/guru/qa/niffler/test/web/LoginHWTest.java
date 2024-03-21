@@ -2,7 +2,8 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.annotation.*;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.userdata.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
@@ -31,14 +32,11 @@ public class LoginHWTest extends BaseWebTest {
             .checkIsLoaded();
   }
 
-//  @TestUser()
-  @TestUsers({@TestUser(username = "fish", password = "12345"), @TestUser(username = "dog", password = "12345")})
-  @InviteFriend(fromUser = "fish", toUser = "dog")
+  @TestUser()
   @DisplayName("Успешный логин с помощью создания случайного пользователя")
   @Test
-//  void successfulLoginWithRandomUser(@User(OUTER) UserJson userJson) {
-  void successfulLoginWithRandomUser(@User(OUTER) UserJson[] userJson) {
-    loginPage.doSuccessfulLogin(userJson[0].username(), userJson[0].testData().password())
+  void successfulLoginWithRandomUser(@User(OUTER) UserJson userJson) {
+    loginPage.doSuccessfulLogin(userJson.username(), userJson.testData().password())
             .checkIsLoaded();
   }
 

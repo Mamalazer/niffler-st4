@@ -18,4 +18,8 @@ public @interface TestUser {
   Category category() default @Category(fake = true);
 
   Spend spend() default @Spend(fake = true);
+
+  InviteFriend inviteFriend() default @InviteFriend(fake = true);
+
+  Friends friends() default @Friends(fake = true);
 }

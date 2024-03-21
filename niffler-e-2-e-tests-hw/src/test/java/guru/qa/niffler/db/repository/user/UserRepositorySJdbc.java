@@ -18,6 +18,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -137,17 +138,55 @@ public class UserRepositorySJdbc implements UserRepository {
 
   @Override
   public Optional<UserEntity> selectUserInfoFromUserDataByName(String userName) {
-    return Optional.empty();
+    try {
+      return Optional.ofNullable(
+              udTemplate.queryForObject(
+                      "SELECT * FROM \"user\" WHERE username = ?",
+                      UserEntityRowMapper.instance,
+                      userName
+              )
+      );
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
   }
 
   @Override
   public void addFriend(String firstUser, String secondUser) {
+    UserEntity user1 = selectUserInfoFromUserDataByName(firstUser).get();
+    UserEntity user2 = selectUserInfoFromUserDataByName(secondUser).get();
+    List<List<UUID>> userIds = List.of(
+            List.of(user1.getId(), user2.getId()),
+            List.of(user2.getId(), user1.getId())
+    );
 
+    udTemplate.batchUpdate("INSERT INTO friendship VALUES (?, ?, ?)", new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setObject(1, userIds.get(i).get(0));
+        ps.setObject(2, userIds.get(i).get(1));
+        ps.setBoolean(3, false);
+      }
+
+      @Override
+      public int getBatchSize() {
+        return userIds.size();
+      }
+    });
   }
 
   @Override
   public void createFriendInvite(String fromUser, String toUser) {
+    UserEntity from = selectUserInfoFromUserDataByName(fromUser).get();
+    UserEntity to = selectUserInfoFromUserDataByName(toUser).get();
 
+    udTemplate.update(con -> {
+      PreparedStatement ps = con.prepareStatement("INSERT INTO friendship VALUES (?, ?, ?)");
+      ps.setObject(1, from.getId());
+      ps.setObject(2, to.getId());
+      ps.setBoolean(3, true);
+      return ps;
+    });
   }
 
   @Override

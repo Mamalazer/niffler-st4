@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -338,19 +339,20 @@ public class UserRepositoryJdbc implements UserRepository {
   public void addFriend(String firstUser, String secondUser) {
     UserEntity user1 = selectUserInfoFromUserDataByName(firstUser).get();
     UserEntity user2 = selectUserInfoFromUserDataByName(secondUser).get();
+    List<List<UUID>> userIds = List.of(
+            List.of(user1.getId(), user2.getId()),
+            List.of(user2.getId(), user1.getId())
+    );
 
     try (Connection conn = udDs.getConnection()) {
       try (PreparedStatement ps = conn.prepareStatement("INSERT INTO friendship VALUES (?, ?, ?)")) {
-        ps.setObject(1, user1.getId());
-        ps.setObject(2, user2.getId());
-        ps.setBoolean(3, false);
-        ps.addBatch();
-        ps.clearParameters();
-        ps.setObject(1, user2.getId());
-        ps.setObject(2, user1.getId());
-        ps.setBoolean(3, false);
-        ps.addBatch();
-        ps.clearParameters();
+        for (List<UUID> users : userIds) {
+          ps.setObject(1, users.get(0));
+          ps.setObject(2, users.get(1));
+          ps.setBoolean(3, false);
+          ps.addBatch();
+          ps.clearParameters();
+        }
         ps.executeBatch();
       }
     } catch (SQLException e) {

@@ -9,6 +9,8 @@ import guru.qa.niffler.db.repository.spend.SpendRepository;
 import guru.qa.niffler.db.repository.spend.SpendRepositoryHibernate;
 import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.db.repository.user.UserRepositoryHibernate;
+import guru.qa.niffler.jupiter.annotation.Friends;
+import guru.qa.niffler.jupiter.annotation.InviteFriend;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.model.userdata.TestData;
 import guru.qa.niffler.model.userdata.UserJson;
@@ -84,6 +86,14 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
             createdUser = createSpend(user, createdUser);
         }
 
+        if (!user.friends().fake()) {
+            addFriends(user);
+        }
+
+        if (!user.inviteFriend().fake()) {
+            inviteFriend(user);
+        }
+
         return createdUser;
     }
 
@@ -137,5 +147,17 @@ public class DataBaseCreteUserExtension extends CreateUserExtension {
                         spendEntity.toJson()
                 )
         );
+    }
+
+    @Override
+    public void addFriends(TestUser user) {
+        Friends friends = user.friends();
+        USER_REPOSITORY.addFriend(friends.firstUser(), friends.secondUser());
+    }
+
+    @Override
+    public void inviteFriend(TestUser user) {
+        InviteFriend inviteFriend = user.inviteFriend();
+        USER_REPOSITORY.createFriendInvite(inviteFriend.fromUser(), inviteFriend.toUser());
     }
 }

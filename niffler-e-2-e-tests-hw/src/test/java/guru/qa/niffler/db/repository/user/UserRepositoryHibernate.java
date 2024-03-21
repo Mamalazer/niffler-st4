@@ -54,17 +54,33 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
 
   @Override
   public Optional<UserEntity> selectUserInfoFromUserDataByName(String userName) {
-    return Optional.empty();
+    return Optional.of((UserEntity) select(
+            USERDATA,
+            "FROM UserEntity u WHERE u.username = :username",
+            Map.of("username", userName)
+    ).get(0));
   }
 
   @Override
   public void addFriend(String firstUser, String secondUser) {
+    UserEntity user1 = selectUserInfoFromUserDataByName(firstUser).get();
+    UserEntity user2 = selectUserInfoFromUserDataByName(secondUser).get();
 
+    user1.addFriends(false, user2);
+    user2.addFriends(false, user1);
+
+    persist(USERDATA, user1);
+    persist(USERDATA, user2);
   }
 
   @Override
   public void createFriendInvite(String fromUser, String toUser) {
+    UserEntity user1 = selectUserInfoFromUserDataByName(fromUser).get();
+    UserEntity user2 = selectUserInfoFromUserDataByName(toUser).get();
 
+    user1.addFriends(true, user2);
+
+    persist(USERDATA, user1);
   }
 
   @Override
