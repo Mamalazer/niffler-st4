@@ -39,6 +39,10 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
 
   public abstract UserJson createSpend(TestUser user, UserJson createdUser) throws IOException, ParseException;
 
+  public abstract void addFriends(TestUser user);
+
+  public abstract void inviteFriend(TestUser user);
+
   @Override
   public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
     return AnnotationSupport.findAnnotation(parameterContext.getParameter(), User.class).isPresent() &&

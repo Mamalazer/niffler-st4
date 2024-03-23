@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -304,5 +305,75 @@ public class UserRepositoryJdbc implements UserRepository {
       throw new RuntimeException(e);
     }
     return Optional.of(userEntity);
+  }
+
+  @Override
+  public Optional<UserEntity> selectUserInfoFromUserDataByName(String userName) {
+    UserEntity userEntity = new UserEntity();
+
+    try (Connection conn = udDs.getConnection()) {
+      try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM \"user\" WHERE username = ?")) {
+        ps.setObject(1, userName);
+
+        try (ResultSet set = ps.executeQuery()) {
+          if (set.next()) {
+            userEntity.setId(UUID.fromString(set.getString("id")));
+            userEntity.setUsername(set.getString("username"));
+            userEntity.setFirstname(set.getString("firstname"));
+            userEntity.setSurname(set.getString("surname"));
+            userEntity.setPhoto(set.getString("photo") != null ? set.getString("photo").getBytes() : null);
+            userEntity.setCurrency(CurrencyValues.valueOf(set.getString("currency")));
+
+          } else {
+            throw new IllegalStateException("Can`t find row in user table");
+          }
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return Optional.of(userEntity);
+  }
+
+  @Override
+  public void addFriend(String firstUser, String secondUser) {
+    UserEntity user1 = selectUserInfoFromUserDataByName(firstUser).get();
+    UserEntity user2 = selectUserInfoFromUserDataByName(secondUser).get();
+    List<List<UUID>> userIds = List.of(
+            List.of(user1.getId(), user2.getId()),
+            List.of(user2.getId(), user1.getId())
+    );
+
+    try (Connection conn = udDs.getConnection()) {
+      try (PreparedStatement ps = conn.prepareStatement("INSERT INTO friendship VALUES (?, ?, ?)")) {
+        for (List<UUID> users : userIds) {
+          ps.setObject(1, users.get(0));
+          ps.setObject(2, users.get(1));
+          ps.setBoolean(3, false);
+          ps.addBatch();
+          ps.clearParameters();
+        }
+        ps.executeBatch();
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public void createFriendInvite(String fromUser, String toUser) {
+    UserEntity from = selectUserInfoFromUserDataByName(fromUser).get();
+    UserEntity to = selectUserInfoFromUserDataByName(toUser).get();
+
+    try (Connection conn = udDs.getConnection()) {
+      try (PreparedStatement ps = conn.prepareStatement("INSERT INTO friendship VALUES (?, ?, ?)")) {
+        ps.setObject(1, from.getId());
+        ps.setObject(2, to.getId());
+        ps.setBoolean(3, true);
+        ps.executeUpdate();
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

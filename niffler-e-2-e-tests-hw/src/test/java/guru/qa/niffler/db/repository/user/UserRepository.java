@@ -23,4 +23,10 @@ public interface UserRepository {
   Optional<UserAuthEntity> selectUserInfoFromAuthById(UUID id);
 
   Optional<UserEntity> selectUserInfoFromUserDataById(UUID id);
+
+  Optional<UserEntity> selectUserInfoFromUserDataByName(String userName);
+
+  void addFriend(String firstUser, String secondUser);
+
+  void createFriendInvite(String fromUser, String toUser);
 }

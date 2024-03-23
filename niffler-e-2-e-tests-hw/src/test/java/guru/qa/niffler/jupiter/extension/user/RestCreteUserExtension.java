@@ -124,4 +124,14 @@ public class RestCreteUserExtension extends CreateUserExtension {
                 )
         );
     }
+
+    @Override
+    public void addFriends(TestUser user) {
+        throw new RuntimeException("Not available now. Please stand by!");
+    }
+
+    @Override
+    public void inviteFriend(TestUser user) {
+        throw new RuntimeException("Not available now. Please stand by!");
+    }
 }

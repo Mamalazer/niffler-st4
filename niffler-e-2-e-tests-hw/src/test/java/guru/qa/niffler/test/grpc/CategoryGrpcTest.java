@@ -5,15 +5,14 @@ import guru.qa.grpc.niffler.grpc.Category;
 import guru.qa.grpc.niffler.grpc.CategoryRequest;
 import guru.qa.grpc.niffler.grpc.UserName;
 import guru.qa.niffler.db.models.user.UserAuthEntity;
-import guru.qa.niffler.jupiter.annotation.DbUser;
-import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class CategoryGrpcTest extends BaseCategoryGrpcTest {
 
-    @DbUser()
+    @TestUser()
     @DisplayName("Создание категории")
     @Test
     void createCategory(UserAuthEntity userAuth) {
@@ -28,8 +27,8 @@ public class CategoryGrpcTest extends BaseCategoryGrpcTest {
         Assertions.assertEquals(userAuth.getUsername(), category.getUsername());
     }
 
-    @DbUser(username = "Mouse", password = "12345", isRunnable = true)
-    @GenerateCategory(category = "Обучение", username = "Mouse")
+    @TestUser(username = "Mouse", password = "12345")
+    @guru.qa.niffler.jupiter.annotation.Category(category = "Обучение", username = "Mouse")
     @DisplayName("Получение всех категорий пользователя")
     @Test
     void getAllCategories(UserAuthEntity userAuth) {
