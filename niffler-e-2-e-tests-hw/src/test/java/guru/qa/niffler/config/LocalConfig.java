@@ -36,4 +36,9 @@ public class LocalConfig implements Config {
   public String spendGrpcHost() {
     return "localhost";
   }
+
+  @Override
+  public String kafkaAddress() {
+    return "localhost:9092";
+  }
 }

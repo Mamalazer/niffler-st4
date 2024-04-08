@@ -50,4 +50,9 @@ public class DockerConfig implements Config {
 //    return "spend.niffler.dc";
     return "localhost";
   }
+
+  @Override
+  public String kafkaAddress() {
+    return "kafka:9092";
+  }
 }

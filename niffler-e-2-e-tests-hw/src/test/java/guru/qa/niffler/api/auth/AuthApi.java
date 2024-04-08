@@ -88,4 +88,14 @@ public interface AuthApi {
 //      "token_type": "Bearer",
 //      "expires_in": 3599
 //  }
+
+  @GET("/register")
+  Call<Void> registerForm();
+
+  @POST("/register")
+  @FormUrlEncoded
+  Call<Void> submitRegister(@Field("username") String username,
+                            @Field("password") String password,
+                            @Field("passwordSubmit") String passwordSubmit,
+                            @Field("_csrf") String csrf);
 }
